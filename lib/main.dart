@@ -1,6 +1,9 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -77,11 +80,13 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(centerTitle: true,
+      appBar: AppBar(
+        centerTitle: true,
         title: Text('Uygulama Başlığı'),
         actions: [
           IconButton(
-            icon: Icon(Icons.language,size: 26), // Dil seçimi için bir ikon belirleyin
+            icon: Icon(Icons.language, size: 26),
+            // Dil seçimi için bir ikon belirleyin
             onPressed: () {
               // IconButton'a tıklama işlemi burada gerçekleştirilecek
               // Kullanıcının dil seçimini yapması için bir dialog veya sayfa açabilirsiniz.
@@ -118,7 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
             SizedBox(height: 20), // Boşluk eklemek için
             MaterialButton(
               onPressed: () {
-                // Giriş yapma işlemi burada yapılacak
+               
               },
               child: Text("GİRİŞ YAP"),
               color: Colors.blue, // Buton rengi
@@ -127,12 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
