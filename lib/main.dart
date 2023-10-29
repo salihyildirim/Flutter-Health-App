@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -40,6 +41,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 title: Text('Uygulama Başlığı'),
                 actions: [
                   IconButton(
+                      onPressed: () async{
+                       await Provider.of<LoginViewModel>(context, listen: false)
+                            .signOut();
+                      },
+                      icon: Icon(Icons.exit_to_app)),
+                  IconButton(
                     icon: Icon(Icons.language, size: 26),
                     onPressed: () {
                       // Kullanıcının dil seçimini yapması için bir dialog veya sayfa açabilirsiniz.
@@ -75,7 +82,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     SizedBox(height: 20),
                     MaterialButton(
-                      onPressed: () {},
+                      onPressed: () async{
+                     UserCredential? userCredential=  await Provider.of<LoginViewModel>(context, listen: false)
+                            .signInAnonymously();
+                       print(userCredential);
+                      },
                       child: Text("GİRİŞ YAP"),
                       color: Colors.blue,
                       textColor: Colors.white,

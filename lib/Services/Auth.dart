@@ -1,11 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-
 class Auth {
+  FirebaseAuth firebaseAuthInstance = FirebaseAuth.instance;
+
   Future<UserCredential?> signInAnonymously() async {
     UserCredential? userCredential;
     try {
-      userCredential = await FirebaseAuth.instance.signInAnonymously();
+      userCredential = await firebaseAuthInstance.signInAnonymously();
       print("Signed in with temporary account.");
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
@@ -17,5 +18,9 @@ class Auth {
       }
     }
     return userCredential;
+  }
+
+  Future<void> signOut() async {
+    await firebaseAuthInstance.signOut();
   }
 }
