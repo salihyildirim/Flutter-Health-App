@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:womenhealth/Services/Auth.dart';
@@ -10,7 +12,11 @@ class LoginViewModel with ChangeNotifier {
     return userCredential;
   }
 
+  Future<bool?> loginStatus() {
+    return Auth.loginStatus();
+  }
+
   Future<void> signOut() async {
-    auth.signOut();
+    await auth.signOut();
   }
 }

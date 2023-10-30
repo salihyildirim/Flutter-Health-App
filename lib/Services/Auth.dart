@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Auth {
@@ -19,6 +21,30 @@ class Auth {
     }
     return userCredential;
   }
+
+  static Future<bool?> loginStatus() async {
+    bool? isLogged;
+    StreamSubscription<User?>? subscription;
+
+    subscription = FirebaseAuth.instance.userChanges().listen((User? user) {
+      if (user == null) {
+        isLogged = false;
+        print('User is currently signed out!');
+      } else {
+        isLogged = true;
+        print('User is signed in!');
+      }
+
+      // Dinleme işlemi tamamlandığında aboneliği iptal et
+      subscription?.cancel();
+    });
+
+    // Bir olayın tamamlanmasını bekler ve sonucu döndürür
+    await subscription.asFuture();
+    return isLogged;
+  }
+
+
 
   Future<void> signOut() async {
     await firebaseAuthInstance.signOut();

@@ -1,8 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:womenhealth/LoginView.dart';
 import 'package:womenhealth/LoginViewModel.dart';
+import 'package:womenhealth/Services/Auth.dart';
+import 'package:womenhealth/WelcomeView.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,69 +33,28 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late Future<bool?> currentLoginStatus;
+
+  @override
+  void initState() {
+    super.initState();
+    currentLoginStatus = Auth.loginStatus();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<LoginViewModel>(
-        create: (_) => LoginViewModel(),
-        builder: (context, _) => Scaffold(
-              appBar: AppBar(
-                centerTitle: true,
-                title: Text('Uygulama Başlığı'),
-                actions: [
-                  IconButton(
-                      onPressed: () async{
-                       await Provider.of<LoginViewModel>(context, listen: false)
-                            .signOut();
-                      },
-                      icon: Icon(Icons.exit_to_app)),
-                  IconButton(
-                    icon: Icon(Icons.language, size: 26),
-                    onPressed: () {
-                      // Kullanıcının dil seçimini yapması için bir dialog veya sayfa açabilirsiniz.
-                    },
-                  ),
-                ],
-              ),
-              body: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      "Giriş Yap",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: "Kullanıcı Adı",
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: "Şifre",
-                        border: OutlineInputBorder(),
-                      ),
-                      obscureText: true,
-                    ),
-                    SizedBox(height: 20),
-                    MaterialButton(
-                      onPressed: () async{
-                     UserCredential? userCredential=  await Provider.of<LoginViewModel>(context, listen: false)
-                            .signInAnonymously();
-                       print(userCredential);
-                      },
-                      child: Text("GİRİŞ YAP"),
-                      color: Colors.blue,
-                      textColor: Colors.white,
-                    ),
-                  ],
-                ),
-              ),
-            ));
+      create: (_) => LoginViewModel(),
+      builder: (context, _) {
+        if (currentLoginStatus == null) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (currentLoginStatus == true) {
+          return WelcomeView();
+        } else
+          return LoginView();
+      },
+    );
   }
 }
