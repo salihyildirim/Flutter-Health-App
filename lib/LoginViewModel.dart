@@ -12,11 +12,14 @@ class LoginViewModel with ChangeNotifier {
     return userCredential;
   }
 
-  Future<bool?> loginStatus() {
-    return Auth.loginStatus();
+  void loginStatus()  {
+      Auth.loginStatus();
   }
 
   Future<void> signOut() async {
     await auth.signOut();
+  }
+  Stream<User?> authStatus(){
+    return auth.authStatus();
   }
 }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Auth {
+  static bool isLogged = false;
   FirebaseAuth firebaseAuthInstance = FirebaseAuth.instance;
 
   Future<UserCredential?> signInAnonymously() async {
@@ -22,11 +23,8 @@ class Auth {
     return userCredential;
   }
 
-  static Future<bool?> loginStatus() async {
-    bool? isLogged;
-    StreamSubscription<User?>? subscription;
-
-    subscription = FirebaseAuth.instance.userChanges().listen((User? user) {
+  static void loginStatus() {
+    FirebaseAuth.instance.userChanges().listen((User? user) {
       if (user == null) {
         isLogged = false;
         print('User is currently signed out!');
@@ -34,19 +32,14 @@ class Auth {
         isLogged = true;
         print('User is signed in!');
       }
-
-      // Dinleme işlemi tamamlandığında aboneliği iptal et
-      subscription?.cancel();
     });
-
-    // Bir olayın tamamlanmasını bekler ve sonucu döndürür
-    await subscription.asFuture();
-    return isLogged;
   }
-
-
 
   Future<void> signOut() async {
     await firebaseAuthInstance.signOut();
+  }
+
+  Stream<User?> authStatus(){
+    return firebaseAuthInstance.authStateChanges();
   }
 }
