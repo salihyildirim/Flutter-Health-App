@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Auth {
-  static bool isLogged = false;
   FirebaseAuth firebaseAuthInstance = FirebaseAuth.instance;
 
   Future<UserCredential?> signInAnonymously() async {
@@ -23,7 +22,8 @@ class Auth {
     return userCredential;
   }
 
-  static void loginStatus() {
+   static bool? loginStatus() {
+     bool? isLogged ;
     FirebaseAuth.instance.userChanges().listen((User? user) {
       if (user == null) {
         isLogged = false;
@@ -33,6 +33,7 @@ class Auth {
         print('User is signed in!');
       }
     });
+    return isLogged;
   }
 
   Future<void> signOut() async {

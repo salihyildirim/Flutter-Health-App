@@ -11,21 +11,30 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
+  bool? isLogged;
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<LoginViewModel>(
-      create: (BuildContext context) { return LoginViewModel(); },
-      builder:(context,_)=> Scaffold(
+      create: (BuildContext context) {
+        isLogged= Provider.of<LoginViewModel>(context, listen: false)
+            .loginStatus();
+        return LoginViewModel();
+      },
+      builder: (context, _) => Scaffold(
         appBar: AppBar(
           centerTitle: true,
           title: Text('Uygulama Başlığı'),
           actions: [
             IconButton(
-                onPressed: () async {
-                  await Provider.of<LoginViewModel>(context, listen: false)
-                      .signOut();
-                },
-                icon: Icon(Icons.exit_to_app)),
+              onPressed: () async {
+                await Provider.of<LoginViewModel>(context, listen: false)
+                    .signOut();
+                setState(() {
+                  isLogged=false;
+                });
+              },
+              icon: Icon(Icons.exit_to_app),
+            ),
             IconButton(
               icon: Icon(Icons.language, size: 26),
               onPressed: () {
@@ -61,16 +70,20 @@ class _LoginViewState extends State<LoginView> {
                 obscureText: true,
               ),
               SizedBox(height: 20),
-              MaterialButton(
-                onPressed: () async {
-                  UserCredential? userCredential =
-                  await Provider.of<LoginViewModel>(context, listen: false)
-                      .signInAnonymously();
-                  print(userCredential);
-                },
+              ElevatedButton(
+                onPressed: isLogged==true
+                    ? null
+                    : () async {
+                        UserCredential? userCredential =
+                            await Provider.of<LoginViewModel>(context,
+                                    listen: false)
+                                .signInAnonymously();
+                        print("TRUE YANI ABONE= ${userCredential?.user?.uid.toString()}");
+                        setState(() {
+                          isLogged=true;
+                        });
+                      },
                 child: Text("GİRİŞ YAP"),
-                color: Colors.blue,
-                textColor: Colors.white,
               ),
             ],
           ),

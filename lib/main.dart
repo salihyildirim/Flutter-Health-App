@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +10,8 @@ import 'package:womenhealth/WelcomeView.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp( ChangeNotifierProvider<LoginViewModel>(create: (context) => LoginViewModel(),
-  child: MyApp()));
+  runApp(ChangeNotifierProvider<LoginViewModel>(
+      create: (context) => LoginViewModel(), child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -45,15 +44,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final _loginViewModelProvider = Provider.of<LoginViewModel>(context, listen: false);
-    return StreamBuilder<User?>(stream: _loginViewModelProvider.authStatus(),
+    final _loginViewModelProvider = Provider.of<LoginViewModel>(context,
+        listen:
+            false); //dependency injection.Verilen yayının nesnesini singleton olarak aldık.
+    return StreamBuilder<User?>(
+        stream: _loginViewModelProvider.authStatus(),
+        // buradaki streamden gelen veride bir değişiklik olur olmaz builder yeniden çizilir. devamlı dinliyor.
         builder: (context, AsyncSnapshot<dynamic> snapshot) {
-          if (snapshot.connectionState==ConnectionState.active){
-            return snapshot.data!=null?WelcomeView():LoginView(); //son gelen veri(data)yani User null mu?
-
-          }
-          else{
-            return SizedBox(height: 300, width: 300,child: CircularProgressIndicator(),);
+          if (snapshot.connectionState == ConnectionState.active) {
+            return snapshot.data != null
+                ? WelcomeView()
+                : LoginView(); //son gelen veri(data)yani User null mu?
+          } else {
+            return SizedBox(
+              height: 300,
+              width: 300,
+              child: CircularProgressIndicator(),
+            );
           }
         });
   }
