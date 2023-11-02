@@ -12,6 +12,29 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
   bool? isLogged;
+  bool isSigningIn = false; // Başlangıçta giriş işlemi aktif değil.
+  Future<void> _signInButtonOnPressed() async {
+    if (!isSigningIn) { // Giriş işlemi zaten devam etmiyorsa
+      setState(() {
+        isSigningIn = true; // Giriş işlemi başladı.
+      });
+
+      UserCredential? userCredential =
+      await Provider.of<LoginViewModel>(context, listen: false)
+          .signInAnonymously();
+
+      setState(() {
+        isSigningIn = false; // Giriş işlemi tamamlandı.
+        if (userCredential != null) {
+          isLogged = true;
+          print("TRUE YANI ABONE= ${userCredential.user?.uid}");
+        } else {
+          isLogged = false;
+          print("Giriş başarısız.");
+        }
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<LoginViewModel>(
@@ -73,16 +96,7 @@ class _LoginViewState extends State<LoginView> {
               ElevatedButton(
                 onPressed: isLogged==true
                     ? null
-                    : () async {
-                        UserCredential? userCredential =
-                            await Provider.of<LoginViewModel>(context,
-                                    listen: false)
-                                .signInAnonymously();
-                        print("TRUE YANI ABONE= ${userCredential?.user?.uid.toString()}");
-                        setState(() {
-                          isLogged=true;
-                        });
-                      },
+                    : _signInButtonOnPressed,
                 child: Text("GİRİŞ YAP"),
               ),
             ],

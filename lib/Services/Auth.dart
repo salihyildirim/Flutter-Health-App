@@ -43,4 +43,17 @@ class Auth {
   Stream<User?> authStatus(){
     return firebaseAuthInstance.authStateChanges();
   }
+
+  Future<User?> signInWithEmail(String email, String password) async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      return userCredential.user; // UserCredential'dan User nesnesini döndür.
+    } catch (e) {
+      print("Hata oluştu: $e");
+      return null; //
+    }
+  }
 }
