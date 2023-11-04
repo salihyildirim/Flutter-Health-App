@@ -23,4 +23,7 @@ class LoginViewModel with ChangeNotifier {
   Stream<User?> authStatus() {
     return auth.authStatus();
   }
+  Future<User?> signInWithEmail (String email, String password) async{
+    return auth.signInWithEmail(email, password);
+  }
 }

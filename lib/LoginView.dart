@@ -14,14 +14,15 @@ class _LoginViewState extends State<LoginView> {
   bool? isLogged;
   bool isSigningIn = false; // Başlangıçta giriş işlemi aktif değil.
   Future<void> _signInButtonOnPressed() async {
-    if (!isSigningIn) { // Giriş işlemi zaten devam etmiyorsa
+    if (!isSigningIn) {
+      // Giriş işlemi zaten devam etmiyorsa
       setState(() {
         isSigningIn = true; // Giriş işlemi başladı.
       });
 
       UserCredential? userCredential =
-      await Provider.of<LoginViewModel>(context, listen: false)
-          .signInAnonymously();
+          await Provider.of<LoginViewModel>(context, listen: false)
+              .signInAnonymously();
 
       setState(() {
         isSigningIn = false; // Giriş işlemi tamamlandı.
@@ -35,12 +36,16 @@ class _LoginViewState extends State<LoginView> {
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
+    TextEditingController emailController= TextEditingController();
+    TextEditingController passController= TextEditingController();
+
     return ChangeNotifierProvider<LoginViewModel>(
       create: (BuildContext context) {
-        isLogged= Provider.of<LoginViewModel>(context, listen: false)
-            .loginStatus();
+        isLogged =
+            Provider.of<LoginViewModel>(context, listen: false).loginStatus();
         return LoginViewModel();
       },
       builder: (context, _) => Scaffold(
@@ -53,7 +58,7 @@ class _LoginViewState extends State<LoginView> {
                 await Provider.of<LoginViewModel>(context, listen: false)
                     .signOut();
                 setState(() {
-                  isLogged=false;
+                  isLogged = false;
                 });
               },
               icon: Icon(Icons.exit_to_app),
@@ -78,7 +83,7 @@ class _LoginViewState extends State<LoginView> {
                 ),
               ),
               SizedBox(height: 20),
-              TextFormField(
+              TextFormField(controller: emailController,
                 decoration: InputDecoration(
                   labelText: "Kullanıcı Adı",
                   border: OutlineInputBorder(),
@@ -86,6 +91,7 @@ class _LoginViewState extends State<LoginView> {
               ),
               SizedBox(height: 10),
               TextFormField(
+                controller: passController,
                 decoration: InputDecoration(
                   labelText: "Şifre",
                   border: OutlineInputBorder(),
@@ -94,11 +100,13 @@ class _LoginViewState extends State<LoginView> {
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: isLogged==true
-                    ? null
-                    : _signInButtonOnPressed,
+                onPressed: isLogged == true ? null : _signInButtonOnPressed,
                 child: Text("GİRİŞ YAP"),
               ),
+              ElevatedButton(
+                  onPressed: () async{
+                     context.read<LoginViewModel>().signInWithEmail(emailController.text, passController.text);
+                  }, child: Text("E-Mail ile Giriş Yap"))
             ],
           ),
         ),
