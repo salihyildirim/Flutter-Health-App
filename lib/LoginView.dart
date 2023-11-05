@@ -41,6 +41,7 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     TextEditingController emailController = TextEditingController();
     TextEditingController passController = TextEditingController();
+    final _registerFormKey=GlobalKey<FormState>();
 
     return ChangeNotifierProvider<LoginViewModel>(
       create: (BuildContext context) {
@@ -72,54 +73,51 @@ class _LoginViewState extends State<LoginView> {
           ],
         ),
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                "Giriş Yap",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+          child: Form(
+            key: _registerFormKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  "Giriş Yap",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              SizedBox(height: 20),
-              TextFormField(
-                controller: emailController,
-                decoration: InputDecoration(
-                  labelText: "E-mail",
-                  border: OutlineInputBorder(),
+                SizedBox(height: 20),
+                TextFormField(
+                  controller: emailController,
+                  decoration: InputDecoration(
+                    labelText: "E-mail",
+                    border: OutlineInputBorder(),
+                  ),
                 ),
-              ),
-              SizedBox(height: 10),
-              TextFormField(
-                controller: passController,
-                decoration: InputDecoration(
-                  labelText: "Şifre",
-                  border: OutlineInputBorder(),
+                SizedBox(height: 10),
+                TextFormField(
+                  controller: passController,
+                  decoration: InputDecoration(
+                    labelText: "Şifre",
+                    border: OutlineInputBorder(),
+                  ),
+                  obscureText: true,
                 ),
-                obscureText: true,
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: isLogged == true ? null : _signInButtonOnPressed,
-                child: Text("GİRİŞ YAP"),
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  print(emailController.text);
-                  print(passController.text);
-
-                  final user = await context
-                      .read<LoginViewModel>()
-                      .signInWithEmail(
-                          emailController.text, passController.text);
-                  print(user?.uid);
-                  print(passController.text);
-                  print(emailController.text);
-                },
-                child: Text("E-Mail ile Giriş Yap"),
-              )
-            ],
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: isLogged == true ? null : _signInButtonOnPressed,
+                  child: Text("GİRİŞ YAP"),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    final user = await context
+                        .read<LoginViewModel>()
+                        .createWithEmail(
+                            emailController.text, passController.text);
+                  },
+                  child: Text("E-Mail ile Giriş Yap"),
+                )
+              ],
+            ),
           ),
         ),
       ),

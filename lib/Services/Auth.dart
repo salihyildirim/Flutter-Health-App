@@ -22,8 +22,8 @@ class Auth {
     return userCredential;
   }
 
-   static bool? loginStatus() {
-     bool? isLogged ;
+  static bool? loginStatus() {
+    bool? isLogged;
     FirebaseAuth.instance.userChanges().listen((User? user) {
       if (user == null) {
         isLogged = false;
@@ -40,16 +40,21 @@ class Auth {
     await firebaseAuthInstance.signOut();
   }
 
-  Stream<User?> authStatus(){
+  Stream<User?> authStatus() {
     return firebaseAuthInstance.authStateChanges();
   }
 
-  Future<User?> signInWithEmail(String email, String password) async {
+  Future<User?> createWithEmail(String email, String password) async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+      User? user = FirebaseAuth.instance.currentUser;
+      if (!user!.emailVerified) {
+        await user.sendEmailVerification();
+      }
       return userCredential.user; // UserCredential'dan User nesnesini döndür.
     } catch (e) {
       print("Hata oluştu: $e");
