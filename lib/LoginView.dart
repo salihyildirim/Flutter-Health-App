@@ -39,8 +39,8 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController emailController= TextEditingController();
-    TextEditingController passController= TextEditingController();
+    TextEditingController emailController = TextEditingController();
+    TextEditingController passController = TextEditingController();
 
     return ChangeNotifierProvider<LoginViewModel>(
       create: (BuildContext context) {
@@ -83,9 +83,10 @@ class _LoginViewState extends State<LoginView> {
                 ),
               ),
               SizedBox(height: 20),
-              TextFormField(controller: emailController,
+              TextFormField(
+                controller: emailController,
                 decoration: InputDecoration(
-                  labelText: "Kullanıcı Adı",
+                  labelText: "E-mail",
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -104,9 +105,20 @@ class _LoginViewState extends State<LoginView> {
                 child: Text("GİRİŞ YAP"),
               ),
               ElevatedButton(
-                  onPressed: () async{
-                     context.read<LoginViewModel>().signInWithEmail(emailController.text, passController.text);
-                  }, child: Text("E-Mail ile Giriş Yap"))
+                onPressed: () async {
+                  print(emailController.text);
+                  print(passController.text);
+
+                  final user = await context
+                      .read<LoginViewModel>()
+                      .signInWithEmail(
+                          emailController.text, passController.text);
+                  print(user?.uid);
+                  print(passController.text);
+                  print(emailController.text);
+                },
+                child: Text("E-Mail ile Giriş Yap"),
+              )
             ],
           ),
         ),
