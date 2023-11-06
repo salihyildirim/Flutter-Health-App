@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -87,8 +88,10 @@ class _LoginViewState extends State<LoginView> {
                 ),
                 SizedBox(height: 20),
                 TextFormField(validator: (value){
-                  if(value!.isEmpty){return "Alan boş bırakılamaz";}
-                  else{return null;}
+                  if(!EmailValidator.validate(value!)){
+                    return 'Lütfen geçerli bir adres giriniz.';
+                  }
+                  return null;
                 },
                   controller: emailController,
                   decoration: InputDecoration(
@@ -98,8 +101,12 @@ class _LoginViewState extends State<LoginView> {
                 ),
                 SizedBox(height: 10),
                 TextFormField(validator: (value){
-                  if(value!.isEmpty){return "Alan boş bırakılamaz";}
-                  else{return null;}
+                  if (value!.isEmpty) {
+                    return 'Şifre boş bırakılamaz!';
+                  } else if (value.length < 6) {
+                    return 'Şifre en az 6 karakter olmalıdır.';
+                  }
+                  return null;
                 },
                   controller: passController,
                   decoration: InputDecoration(
@@ -114,11 +121,11 @@ class _LoginViewState extends State<LoginView> {
                   child: Text("GİRİŞ YAP"),
                 ),
                 ElevatedButton(
-                  onPressed: () async {
+                  onPressed: () async {if (_registerFormKey.currentState!.validate()) {
                     final user = await context
                         .read<LoginViewModel>()
                         .createWithEmail(
-                            emailController.text, passController.text);
+                            emailController.text, passController.text);}
                   },
                   child: Text("E-Mail ile Giriş Yap"),
                 )
