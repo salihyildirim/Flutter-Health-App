@@ -86,7 +86,10 @@ class _LoginViewState extends State<LoginView> {
                   ),
                 ),
                 SizedBox(height: 20),
-                TextFormField(
+                TextFormField(validator: (value){
+                  if(value!.isEmpty){return "Alan boş bırakılamaz";}
+                  else{return null;}
+                },
                   controller: emailController,
                   decoration: InputDecoration(
                     labelText: "E-mail",
@@ -94,7 +97,10 @@ class _LoginViewState extends State<LoginView> {
                   ),
                 ),
                 SizedBox(height: 10),
-                TextFormField(
+                TextFormField(validator: (value){
+                  if(value!.isEmpty){return "Alan boş bırakılamaz";}
+                  else{return null;}
+                },
                   controller: passController,
                   decoration: InputDecoration(
                     labelText: "Şifre",
