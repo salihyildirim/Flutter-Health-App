@@ -121,13 +121,20 @@ class _LoginViewState extends State<LoginView> {
                   child: Text("GİRİŞ YAP"),
                 ),
                 ElevatedButton(
-                  onPressed: () async {if (_registerFormKey.currentState!.validate()) {
-                    final user = await context
+                  onPressed: () async {
+                    User? user;
+                    if (_registerFormKey.currentState!.validate()) {
+                    user = await context
                         .read<LoginViewModel>()
                         .createWithEmail(
                             emailController.text, passController.text);}
+                    if(user!=null){
+                      setState(() {
+                        isLogged = false;
+                      });
+                    }
                   },
-                  child: Text("E-Mail ile Giriş Yap"),
+                  child: Text("E-Mail ile Kayıt Yap"),
                 )
               ],
             ),
