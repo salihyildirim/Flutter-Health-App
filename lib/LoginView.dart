@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:womenhealth/LoginViewModel.dart';
 import 'package:womenhealth/RegisterView.dart';
+import 'package:womenhealth/Services/Helper.dart';
+import 'package:womenhealth/WelcomeView.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -22,11 +24,10 @@ class _LoginViewState extends State<LoginView> {
     super.dispose();
   }
 
-  bool? isLogged;
-  bool isSigningIn = false; // Başlangıçta giriş işlemi aktif değil.
+  bool? isLogged; // giriş yapıldı mı
+  bool isSigningIn = false; // giriş işlemi devam ediyor mu
   Future<void> _signInButtonOnPressed(String email, String password) async {
     if (!isSigningIn) {
-      // Giriş işlemi zaten devam etmiyorsa
       setState(() {
         isSigningIn = true; // Giriş işlemi başladı.
       });
@@ -43,6 +44,10 @@ class _LoginViewState extends State<LoginView> {
         if (user != null) {
           isLogged = true;
           print("TRUE YANI ABONE= ${user.uid}");
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const WelcomeView()),
+          );
         } else {
           isLogged = false;
           print("Giriş başarısız.");
@@ -55,7 +60,7 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     TextEditingController emailController = TextEditingController();
     TextEditingController passController = TextEditingController();
-    final _registerFormKey = GlobalKey<FormState>();
+    final loginFormKey = GlobalKey<FormState>();
 
     return ChangeNotifierProvider<LoginViewModel>(
       create: (BuildContext context) {
@@ -88,7 +93,7 @@ class _LoginViewState extends State<LoginView> {
         ),
         body: Center(
           child: Form(
-            key: _registerFormKey,
+            key: loginFormKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -136,15 +141,25 @@ class _LoginViewState extends State<LoginView> {
                 //   child: Text("GİRİŞ YAP"),
                 // ),
                 ElevatedButton(
-                    onPressed: isLogged == true
-                        ? null
-                        : () => _signInButtonOnPressed(
-                            emailController.text, passController.text),
-                    child: Text("GİRİŞ YAP.")),
+                  onPressed: isLogged == true
+                      ? null
+                      : () async {
+                    await _signInButtonOnPressed(
+                        emailController.text, passController.text);
+                    if (isLogged == false) {
+                      Future.delayed(Duration.zero, () {
+                        Helper.showErrorDialog(context, "Hata", "Giriş Başarısız. Bilgilerinizi tekrar kontrol ediniz.");
+                      });
+                    }
+                  },
+                  child: Text("GİRİŞ YAP."),
+                ),
+
+
                 TextButton(
                   onPressed: () async {
                     //  User? user;
-                    //  if (_registerFormKey.currentState!.validate()) {
+                    //  if (loginFormKey.currentState!.validate()) {
                     //    user = await context
                     //        .read<LoginViewModel>()
                     //        .createWithEmail(
