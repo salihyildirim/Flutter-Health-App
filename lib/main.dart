@@ -38,23 +38,23 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    Auth.loginStatus();
+    Auth.loginStatus(); // uygulama ilk baslarken login kontrolü yapılır.
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    final _loginViewModelProvider = Provider.of<LoginViewModel>(context,
+    final loginViewModelProvider = Provider.of<LoginViewModel>(context,
         listen:
             false); //dependency injection.Verilen yayının nesnesini singleton olarak aldık.
     return StreamBuilder<User?>(
-        stream: _loginViewModelProvider.authStatus(),
+        stream: loginViewModelProvider.authStatus(),
         // buradaki streamden gelen veride bir değişiklik olur olmaz builder yeniden çizilir. devamlı dinliyor.
         builder: (context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState == ConnectionState.active) {
             return snapshot.data != null
                 ? WelcomeView()
-                : LoginView(); //son gelen veri(data)yani User null mu?
+                : LoginView(); //son gelen veri(data)yani User, null mu?
           } else {
             return SizedBox(
               height: 300,
