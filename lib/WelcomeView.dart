@@ -65,12 +65,16 @@ class _WelcomeViewState extends State<WelcomeView> {
         ],
       ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => LoginView()));
-          },
-          child: Text('ANA SAYFAYA DÖN'),
+        child: Column(
+          children: [ElevatedButton(onPressed: (){}, child: Text("GEÇMİŞ HESAPLAMALAR")),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => LoginView()));
+              },
+              child: Text('ANA SAYFAYA DÖN'),
+            ),
+          ],
         ),
       ),
     );
