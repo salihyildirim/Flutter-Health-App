@@ -67,6 +67,7 @@ class _WelcomeViewState extends State<WelcomeView> {
       body: Center(
         child: Column(
           children: [ElevatedButton(onPressed: (){}, child: Text("GEÇMİŞ HESAPLAMALAR")),
+            ElevatedButton(onPressed: (){}, child: Text("GÜNLÜK KALORİ HESAPLA")   ),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
