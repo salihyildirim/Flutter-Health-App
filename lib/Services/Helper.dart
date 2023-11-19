@@ -19,5 +19,17 @@ class Helper {
         );
       },
     );
+  } // Harcanan kalori = (MET değeri x 3.5 x kilo (kg) x süre (dakika)) / 200
+
+  double toplamKalori(double MET,int kg,int dakika,String cinsiyet,){
+    if(cinsiyet=="ERKEK"){
+      return (MET*3.5*kg*dakika);
+    }
+    if(cinsiyet=="KADIN"){
+      return (MET*3.5*kg*dakika)*0.9;
+    }
+    else {
+      return 0;
+    }
   }
 }
