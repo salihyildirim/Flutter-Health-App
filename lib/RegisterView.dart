@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:womenhealth/RegisterViewModel.dart';
+import 'package:womenhealth/UserInfoView.dart';
 import 'package:womenhealth/WelcomeView.dart';
 
 class RegisterView extends StatefulWidget {
@@ -87,7 +88,7 @@ class _RegisterViewState extends State<RegisterView> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => WelcomeView(),
+                            builder: (context) => UserInfoView(),
                           ),
                         );
                       }

@@ -28,6 +28,10 @@ android {
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -68,6 +72,6 @@ flutter {
 
 dependencies {
     implementation 'com.google.firebase:firebase-core:21.1.1' // Firebase Core
-    implementation 'com.google.firebase:firebase-firestore:24.7.1' // Firebase Firestore
+    implementation 'com.google.firebase:firebase-firestore:24.9.1' // Firebase Firestore
 }
 apply plugin: 'com.google.gms.google-services'
