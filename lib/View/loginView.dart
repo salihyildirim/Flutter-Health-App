@@ -2,10 +2,10 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:womenhealth/LoginViewModel.dart';
-import 'package:womenhealth/RegisterView.dart';
-import 'package:womenhealth/Services/Helper.dart';
-import 'package:womenhealth/WelcomeView.dart';
+import 'package:womenhealth/Service/Helper.dart';
+import 'package:womenhealth/View/registerView.dart';
+import 'package:womenhealth/View/welcomeView.dart';
+import 'package:womenhealth/ViewModel/loginViewModel.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});

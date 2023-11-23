@@ -1,12 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:womenhealth/LoginView.dart';
-
-import 'package:flutter/material.dart';
-
-import 'package:flutter/material.dart';
-
-import 'package:flutter/material.dart';
+import 'package:womenhealth/View/loginView.dart';
 
 class WelcomeView extends StatefulWidget {
   const WelcomeView({Key? key}) : super(key: key);

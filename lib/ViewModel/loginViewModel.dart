@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:womenhealth/Services/Auth.dart';
+import 'package:womenhealth/Service/Auth.dart';
+
 
 class LoginViewModel with ChangeNotifier {
   Auth auth = Auth();

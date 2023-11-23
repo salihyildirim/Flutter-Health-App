@@ -2,10 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:womenhealth/LoginView.dart';
-import 'package:womenhealth/LoginViewModel.dart';
-import 'package:womenhealth/Services/Auth.dart';
-import 'package:womenhealth/WelcomeView.dart';
+import 'package:womenhealth/Service/Auth.dart';
+import 'package:womenhealth/View/loginView.dart';
+import 'package:womenhealth/View/welcomeView.dart';
+import 'package:womenhealth/ViewModel/loginViewModel.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
