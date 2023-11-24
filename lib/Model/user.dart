@@ -1,5 +1,6 @@
 class User {
   String eMail; // email,firestore Id olarak kaydedilecek.
+  String password;
   String name;
   String surName;
   String cinsiyet;
@@ -8,6 +9,7 @@ class User {
 
   User({
     required this.eMail,
+  required this.password,
     required this.name,
     required this.surName,
     required this.cinsiyet,
@@ -18,6 +20,7 @@ class User {
   Map<String, dynamic> toMap() {
     return {
       'eMail': eMail,
+      'password':password,
       'name': name,
       'surName': surName,
       'cinsiyet': cinsiyet,
@@ -29,6 +32,7 @@ class User {
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
       eMail: map['eMail'],
+      password: map['password'],
       name: map['name'],
       surName: map['surName'],
       cinsiyet: map['cinsiyet'],

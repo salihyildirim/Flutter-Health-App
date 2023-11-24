@@ -1,10 +1,12 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:womenhealth/Blocs/user/user_bloc.dart';
+import 'package:womenhealth/Blocs/user/user_event.dart';
+import 'package:womenhealth/Model/user.dart';
 import 'package:womenhealth/View/userInfoView.dart';
 import 'package:womenhealth/ViewModel/registerViewModel.dart';
-
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -22,6 +24,7 @@ class _RegisterViewState extends State<RegisterView> {
   @override
   Widget build(BuildContext context) {
     final registerFormKey = GlobalKey<FormState>();
+    final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
     return ChangeNotifierProvider<RegisterViewModel>(
       create: (BuildContext context) => RegisterViewModel(),
@@ -80,25 +83,39 @@ class _RegisterViewState extends State<RegisterView> {
                 ElevatedButton(
                   onPressed: () async {
                     if (registerFormKey.currentState!.validate()) {
-                      User? user = await context
+                      firebase_auth.User? registerUser = await context
                           .read<RegisterViewModel>()
-                          .createWithEmail(
-                              emailController.text, passwordController.text);
-                      if (user != null) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => UserInfoView(),
-                          ),
+                          .createWithEmail(emailController.text, passwordController.text);
+
+                      if (registerUser != null) {
+                        User newUser = User(
+                          eMail: emailController.text,
+                          password: passwordController.text,
+                          name: '',
+                          surName: '',
+                          cinsiyet: '',
+                          kg: 0,
+                          yas: 0,
                         );
-                      }
-                      else{
-                        //kayıt esnasında bir hata oluştu.
+
+                        BuildContext currentContext = context;
+
+                        Future.delayed(Duration.zero, () {
+                          Navigator.push(
+                            currentContext,
+                            MaterialPageRoute(
+                              builder: (context) => UserInfoView(user: newUser),
+                            ),
+                          );
+                        });
+                      } else {
+                        print("registerUser null geldi");
                       }
                     }
                   },
                   child: Text('Kayıt Ol'),
                 ),
+
               ],
             ),
           ),

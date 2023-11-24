@@ -1,9 +1,8 @@
-import 'package:womenhealth/Model/user.dart';
 
-abstract class UserEvent{}
+abstract class UserEvent {}
 
-class AddUser extends UserEvent{
-  final User user;
+class SaveUserToFirestoreEvent extends UserEvent {
+  final Map<String, dynamic> userData;
 
-  AddUser({required this.user});
+  SaveUserToFirestoreEvent({required this.userData});
 }
