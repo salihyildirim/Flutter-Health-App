@@ -1,4 +1,3 @@
-// user_bloc.dart
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,13 +8,11 @@ import 'package:womenhealth/Blocs/user/user_state.dart';
 class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc() : super(UserInitialState());
 
-
-Stream<UserState> mapEventToState(UserEvent event) async* {
+  @override
+  Stream<UserState> mapEventToState(UserEvent event) async* {
     if (event is SaveUserToFirestoreEvent) {
-      print("if (event is SaveUserToFirestoreEvent) içine girdi");
-      // Firestore'a kullanıcıyı kaydet
       try {
-        await FirebaseFirestore.instance
+         await FirebaseFirestore.instance
             .collection('users')
             .doc(event.userData['eMail']) // Belki kullanıcının UID'sini kullanmak isteyebilirsiniz
             .set(event.userData);
@@ -23,9 +20,6 @@ Stream<UserState> mapEventToState(UserEvent event) async* {
       } catch (e) {
         yield UserErrorState(errorMessage: e.toString());
       }
-    }
-    else{
-      print("Girmedi");
     }
   }
 }

@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:womenhealth/Blocs/user/user_bloc.dart';
 import 'package:womenhealth/Service/Auth.dart';
 import 'package:womenhealth/View/loginView.dart';
 import 'package:womenhealth/View/welcomeView.dart';
@@ -10,8 +12,20 @@ import 'package:womenhealth/ViewModel/loginViewModel.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(ChangeNotifierProvider<LoginViewModel>(
-      create: (context) => LoginViewModel(), child: MyApp()));
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<LoginViewModel>(
+          create: (context) => LoginViewModel(),
+        ),
+        BlocProvider<UserBloc>(
+          create: (context) => UserBloc(),
+        ),
+        // İhtiyaç duyulan diğer Provider'ları buraya ekleyebilirsiniz.
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
