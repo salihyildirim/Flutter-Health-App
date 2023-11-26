@@ -8,17 +8,18 @@ import 'package:womenhealth/Blocs/user/user_state.dart';
 class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc() : super(UserInitialState());
 
+
   @override
-  Stream<UserState> mapEventToState(UserEvent event) async* {
+  void on<SaveUserToFirestoreEvent>(event, emit) async {
     if (event is SaveUserToFirestoreEvent) {
       try {
-         await FirebaseFirestore.instance
+        await FirebaseFirestore.instance
             .collection('users')
             .doc(event.userData['eMail']) // Belki kullanıcının UID'sini kullanmak isteyebilirsiniz
             .set(event.userData);
-        yield UserSuccessState(); // İşlem başarılı oldu
+        emit(UserSuccessState()); // İşlem başarılı oldu
       } catch (e) {
-        yield UserErrorState(errorMessage: e.toString());
+        emit(UserErrorState(errorMessage: e.toString()));
       }
     }
   }
