@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class FirestoreServis {
+class FirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final String collectionName; // Firestore koleksiyon adı
 
-  FirestoreServis(this.collectionName);
+  FirestoreService(this.collectionName);
 
   Future<void> createData(Map<String, dynamic> data) async {
     try {

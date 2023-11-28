@@ -97,7 +97,6 @@ class _RegisterViewState extends State<RegisterView> {
                           kg: 0,
                           yas: 0,
                         );
-
                         context.read<UserBloc>().add(SaveUserToFirestoreEvent(userData: newUser.toMap()));
                         BuildContext currentContext = context;
 

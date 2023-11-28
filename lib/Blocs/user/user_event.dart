@@ -6,3 +6,4 @@ class SaveUserToFirestoreEvent extends UserEvent {
 
   SaveUserToFirestoreEvent({required this.userData});
 }
+

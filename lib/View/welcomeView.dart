@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:womenhealth/View/loginView.dart';
+import 'package:womenhealth/View/userInfoView.dart';
 
 class WelcomeView extends StatefulWidget {
   const WelcomeView({Key? key}) : super(key: key);
@@ -64,11 +65,14 @@ class _WelcomeViewState extends State<WelcomeView> {
             ElevatedButton(onPressed: (){}, child: Text("GÜNLÜK KALORİ HESAPLA")   ),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => LoginView()));
+                
               },
               child: Text('ANA SAYFAYA DÖN'),
             ),
+            ElevatedButton(onPressed: (){
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => UserInfoView(user: user)));
+            }, child: Text('Bilgilerimi Güncelle'))
           ],
         ),
       ),
