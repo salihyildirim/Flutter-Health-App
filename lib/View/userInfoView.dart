@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:womenhealth/Blocs/user/user_bloc.dart';
 import 'package:womenhealth/Blocs/user/user_event.dart';
 import 'package:womenhealth/Model/user.dart';
+import 'package:womenhealth/View/welcomeView.dart';
 
 class UserInfoView extends StatefulWidget {
   final User user;
@@ -136,6 +137,7 @@ class _UserInfoViewState extends State<UserInfoView> {
                           kg: _kg,
                           yas: _age);
                       BlocProvider.of<UserBloc>(context).add(SaveUserToFirestoreEvent(userData: newUser.toMap()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>WelcomeView()));
 
                     }
                   },

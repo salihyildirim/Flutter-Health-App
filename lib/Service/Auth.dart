@@ -37,6 +37,16 @@ class Auth {
     loginState=isLogged; //global login durumunu güncelledim.
     return isLogged;
   }
+  Future<User?> getCurrentUser() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      print('Current user: ${user.uid}');
+      return user;
+    } else {
+      print('No user currently logged in.');
+      return null;
+    }
+  }
 
   Future<void> signOut() async {
     await firebaseAuthInstance.signOut();
