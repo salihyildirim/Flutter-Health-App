@@ -1,3 +1,5 @@
+import 'package:womenhealth/Model/User_Diet.dart';
+
 class User {
   String eMail; // email,firestore Id olarak kaydedilecek.
   String password;
@@ -6,6 +8,8 @@ class User {
   String cinsiyet;
   int kg;
   int yas;
+  DateTime registerDate;
+  UserDiet userDiet;
 
   User({
     required this.eMail,
@@ -15,6 +19,8 @@ class User {
     required this.cinsiyet,
     required this.kg,
     required this.yas,
+    required this.registerDate,
+    required this.userDiet
   });
 
   Map<String, dynamic> toMap() {
@@ -38,6 +44,8 @@ class User {
       cinsiyet: map['cinsiyet'],
       kg: map['kg'],
       yas: map['yas'],
+      registerDate: map['registerDate'],
+      userDiet: map['userDiet']
     );
   }
 }
