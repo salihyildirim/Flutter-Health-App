@@ -9,7 +9,7 @@ class User {
   int kg;
   int yas;
   DateTime registerDate;
-  UserDiet userDiet;
+  UserDiet? userDiet;
 
   User({
     required this.eMail,
