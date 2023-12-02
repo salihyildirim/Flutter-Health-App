@@ -20,7 +20,7 @@ class User {
     required this.kg,
     required this.yas,
     required this.registerDate,
-    required this.userDiet
+     this.userDiet
   });
 
   Map<String, dynamic> toMap() {
@@ -32,6 +32,8 @@ class User {
       'cinsiyet': cinsiyet,
       'kg': kg,
       'yas': yas,
+      'registerDate':registerDate,
+      'userDiet' :userDiet
     };
   }
 

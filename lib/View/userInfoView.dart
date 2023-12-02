@@ -136,8 +136,8 @@ class _UserInfoViewState extends State<UserInfoView> {
                           cinsiyet: _gender,
                           kg: _kg,
                           yas: _age,
-                      registerDate: DateTime.now(),
-                      userDiet: null);
+                      registerDate: widget.user.registerDate,
+                      );
                       BlocProvider.of<UserBloc>(context).add(SaveUserToFirestoreEvent(userData: newUser.toMap()));
                       Navigator.push(context, MaterialPageRoute(builder: (context)=>WelcomeView()));
 

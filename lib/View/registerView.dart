@@ -97,7 +97,6 @@ class _RegisterViewState extends State<RegisterView> {
                           kg: 0,
                           yas: 0,
                           registerDate: DateTime.now(),
-                          userDiet: null
 
                         );
                         context.read<UserBloc>().add(SaveUserToFirestoreEvent(userData: newUser.toMap()));
