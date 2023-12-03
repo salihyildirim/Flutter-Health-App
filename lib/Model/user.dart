@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:womenhealth/Model/User_Diet.dart';
 
 class User {
@@ -46,7 +47,7 @@ class User {
       cinsiyet: map['cinsiyet'],
       kg: map['kg'],
       yas: map['yas'],
-      registerDate: map['registerDate'],
+        registerDate: (map['registerDate'] as Timestamp).toDate(),
       userDiet: map['userDiet']
     );
   }
