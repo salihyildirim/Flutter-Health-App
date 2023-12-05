@@ -12,43 +12,41 @@ class User {
   DateTime registerDate;
   UserDiet? userDiet;
 
-  User({
-    required this.eMail,
-  required this.password,
-    required this.name,
-    required this.surName,
-    required this.cinsiyet,
-    required this.kg,
-    required this.yas,
-    required this.registerDate,
-     this.userDiet
-  });
+  User(
+      {required this.eMail,
+      required this.password,
+      required this.name,
+      required this.surName,
+      required this.cinsiyet,
+      required this.kg,
+      required this.yas,
+      required this.registerDate,
+      this.userDiet});
 
   Map<String, dynamic> toMap() {
     return {
       'eMail': eMail,
-      'password':password,
+      'password': password,
       'name': name,
       'surName': surName,
       'cinsiyet': cinsiyet,
       'kg': kg,
       'yas': yas,
-      'registerDate':registerDate,
-      'userDiet' :userDiet
+      'registerDate': registerDate,
+      'userDiet': userDiet
     };
   }
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      eMail: map['eMail'],
-      password: map['password'],
-      name: map['name'],
-      surName: map['surName'],
-      cinsiyet: map['cinsiyet'],
-      kg: map['kg'],
-      yas: map['yas'],
+        eMail: map['eMail'],
+        password: map['password'],
+        name: map['name'],
+        surName: map['surName'],
+        cinsiyet: map['cinsiyet'],
+        kg: map['kg'],
+        yas: map['yas'],
         registerDate: (map['registerDate'] as Timestamp).toDate(),
-      userDiet: map['userDiet']
-    );
+        userDiet: map['userDiet']);
   }
 }

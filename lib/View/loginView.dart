@@ -72,24 +72,7 @@ class _LoginViewState extends State<LoginView> {
         appBar: AppBar(
           centerTitle: true,
           title: Text('Uygulama Başlığı'),
-          actions: [
-            IconButton(
-              onPressed: () async {
-                await Provider.of<LoginViewModel>(context, listen: false)
-                    .signOut();
-                setState(() {
-                  isLogged = false;
-                });
-              },
-              icon: Icon(Icons.exit_to_app),
-            ),
-            IconButton(
-              icon: Icon(Icons.language, size: 26),
-              onPressed: () {
-                // Kullanıcının dil seçimini yapması için bir dialog veya sayfa açabilirsiniz.
-              },
-            ),
-          ],
+          
         ),
         body: Center(
           child: Form(

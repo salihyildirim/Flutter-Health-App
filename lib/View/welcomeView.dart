@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:womenhealth/Model/user.dart';
 import 'package:womenhealth/View/loginView.dart';
 import 'package:womenhealth/View/userInfoView.dart';
-import 'package:womenhealth/ViewModel/userInfoViewModel.dart';
+import 'package:womenhealth/ViewModel/welcomeViewModel.dart';
 
 class WelcomeView extends StatefulWidget {
   const WelcomeView({Key? key}) : super(key: key);
@@ -17,8 +17,8 @@ class WelcomeView extends StatefulWidget {
 class _WelcomeViewState extends State<WelcomeView> {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<UserInfoViewModel>(
-      create: (context) => UserInfoViewModel(),
+    return ChangeNotifierProvider<WelcomeViewModel>(
+      create: (context) => WelcomeViewModel(),
       builder: (context, _) => Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -34,7 +34,7 @@ class _WelcomeViewState extends State<WelcomeView> {
                 } else if (value == 'settings') {
                   // Ayarlar sayfasına yönlendirme işlemleri burada yapılabilir.
                 } else if (value == 'logout') {
-                  // Çıkış yapma işlemleri burada yapılabilir.
+                  context.read<WelcomeViewModel>().signOut();
                 }
               },
               itemBuilder: (BuildContext context) => [
@@ -92,11 +92,11 @@ class _WelcomeViewState extends State<WelcomeView> {
                   onPressed: () async {
                     User? getUser;
                     firebase_auth.User? currentUser = await context
-                        .read<UserInfoViewModel>()
+                        .read<WelcomeViewModel>()
                         .getCurrentUser();
                     if (currentUser != null) {
                       getUser = await context
-                          .read<UserInfoViewModel>()
+                          .read<WelcomeViewModel>()
                           .getUser(currentUser.email.toString());
                       Navigator.push(
                           context,

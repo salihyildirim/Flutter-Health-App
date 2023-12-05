@@ -5,7 +5,7 @@ import 'package:womenhealth/Model/user.dart';
 import 'package:womenhealth/Service/Auth.dart';
 import 'package:womenhealth/Service/FirestoreService.dart';
 
-class UserInfoViewModel with ChangeNotifier{
+class WelcomeViewModel with ChangeNotifier{
   final FirestoreService _firestoreService = FirestoreService('users');
   final Auth _auth=Auth();
 
@@ -17,6 +17,10 @@ class UserInfoViewModel with ChangeNotifier{
 
   Future<firebase_auth.User?> getCurrentUser() async {
     return await _auth.getCurrentUser();
+  }
+
+  Future<void> signOut() async {
+    await _auth.signOut();
   }
 
 }
