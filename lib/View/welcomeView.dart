@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:womenhealth/Model/user.dart';
+import 'package:womenhealth/Service/Auth.dart';
 import 'package:womenhealth/View/loginView.dart';
 import 'package:womenhealth/View/userInfoView.dart';
 import 'package:womenhealth/ViewModel/welcomeViewModel.dart';
@@ -27,14 +28,16 @@ class _WelcomeViewState extends State<WelcomeView> {
             PopupMenuButton<String>(
               offset: Offset(0, kToolbarHeight),
               // Menüyü App Bar'ın altında başlatır
-              onSelected: (value) {
+              onSelected: (value) async {
                 // Seçilen değeri kontrol edebilir ve ilgili işlemleri gerçekleştirebilirsiniz.
                 if (value == 'edit') {
                   // Düzenleme sayfasına yönlendirme işlemleri burada yapılabilir.
                 } else if (value == 'settings') {
                   // Ayarlar sayfasına yönlendirme işlemleri burada yapılabilir.
                 } else if (value == 'logout') {
-                  context.read<WelcomeViewModel>().signOut();
+                  await Provider.of<WelcomeViewModel>(context, listen: false)
+                      .signOut();
+                  Auth.loginState=false;
                 }
               },
               itemBuilder: (BuildContext context) => [
@@ -84,16 +87,16 @@ class _WelcomeViewState extends State<WelcomeView> {
                   onPressed: () {}, child: Text("GÜNLÜK KALORİ HESAPLA")),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginView()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => LoginView()));
                 },
                 child: Text('ANA SAYFAYA DÖN'),
               ),
               ElevatedButton(
                   onPressed: () async {
                     User? getUser;
-                    firebase_auth.User? currentUser = await context
-                        .read<WelcomeViewModel>()
-                        .getCurrentUser();
+                    firebase_auth.User? currentUser =
+                        await context.read<WelcomeViewModel>().getCurrentUser();
                     if (currentUser != null) {
                       getUser = await context
                           .read<WelcomeViewModel>()
@@ -103,8 +106,7 @@ class _WelcomeViewState extends State<WelcomeView> {
                           MaterialPageRoute(
                               builder: (context) =>
                                   UserInfoView(user: getUser!)));
-                    }
-                    else{
+                    } else {
                       print("Kullanici yok");
                     }
                   },

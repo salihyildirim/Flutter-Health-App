@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:womenhealth/Service/Helper.dart';
 import 'package:womenhealth/View/registerView.dart';
-import 'package:womenhealth/View/welcomeView.dart';
 import 'package:womenhealth/ViewModel/loginViewModel.dart';
 
 class LoginView extends StatefulWidget {
@@ -39,20 +38,23 @@ class _LoginViewState extends State<LoginView> {
       User? user = await Provider.of<LoginViewModel>(context, listen: false)
           .signInWithEmail(email, password);
 
-      setState(() {
-        isSigningIn = false; // Giriş işlemi tamamlandı.
-        if (user != null) {
-          isLogged = true;
-          print("TRUE YANI ABONE= ${user.uid}");
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const WelcomeView()),
-          );
-        } else {
-          isLogged = false;
-          print("Giriş başarısız.");
-        }
-      });
+
+      Provider.of<LoginViewModel>(context, listen: false).authStatus();
+
+      // setState(() {
+      //   isSigningIn = false; // Giriş işlemi tamamlandı.
+      //   if (user != null) {
+      //     isLogged = true;
+      //     print("TRUE YANI ABONE= ${user.uid}");
+      //     Navigator.push(
+      //       context,
+      //       MaterialPageRoute(builder: (context) => const WelcomeView()),
+      //     );
+      //   } else {
+      //     isLogged = false;
+      //     print("Giriş başarısız.");
+      //   }
+      // });
     }
   }
 
@@ -71,8 +73,25 @@ class _LoginViewState extends State<LoginView> {
       builder: (context, _) => Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text('Uygulama Başlığı'),
-          
+          title: Text('Fit Kalalım'),
+          actions: [
+            IconButton(
+              onPressed: () async {
+                await Provider.of<LoginViewModel>(context, listen: false)
+                    .signOut();
+                setState(() {
+                  isLogged = false;
+                });
+              },
+              icon: Icon(Icons.exit_to_app),
+            ),
+            IconButton(
+              icon: Icon(Icons.language, size: 26),
+              onPressed: () {
+                // Kullanıcının dil seçimini yapması için bir dialog veya sayfa açabilirsiniz.
+              },
+            ),
+          ],
         ),
         body: Center(
           child: Form(

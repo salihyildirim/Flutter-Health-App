@@ -70,10 +70,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 ? WelcomeView()
                 : LoginView(); //son gelen veri(data)yani User, null mu?
           } else {
-            return SizedBox(
-              height: 300,
-              width: 300,
-              child: CircularProgressIndicator(),
+            return const Center(
+              child: FractionallySizedBox(
+                widthFactor: 0.5, // Ekran genişliğinin yarısı kadar genişlik
+                heightFactor: 0.5, // Ekran yüksekliğinin yarısı kadar yükseklik
+                child: CircularProgressIndicator(),
+              ),
             );
           }
         });
