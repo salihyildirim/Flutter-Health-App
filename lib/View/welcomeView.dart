@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:womenhealth/Model/user.dart';
 import 'package:womenhealth/Service/Auth.dart';
-import 'package:womenhealth/View/loginView.dart';
 import 'package:womenhealth/View/userInfoView.dart';
 import 'package:womenhealth/ViewModel/welcomeViewModel.dart';
 
@@ -19,25 +18,38 @@ class _WelcomeViewState extends State<WelcomeView> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<WelcomeViewModel>(
-      create: (context) => WelcomeViewModel(),
+      create: (context) {
+        return WelcomeViewModel();
+      },
       builder: (context, _) => Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text('Welcome Page'),
+          title: FutureBuilder<String?>(
+            future: Provider.of<WelcomeViewModel>(context).getCurrentUserName(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Text('HOŞGELDİN'); // Eğer ad alınana kadar bekle
+              } else {
+                return Text('HOŞGELDİN ${snapshot.data?.toUpperCase()}'); // Kullanıcı adını göster
+              }
+            },
+          ),
           actions: [
             PopupMenuButton<String>(
               offset: Offset(0, kToolbarHeight),
               // Menüyü App Bar'ın altında başlatır
               onSelected: (value) async {
-                // Seçilen değeri kontrol edebilir ve ilgili işlemleri gerçekleştirebilirsiniz.
+                //
                 if (value == 'edit') {
-                  // Düzenleme sayfasına yönlendirme işlemleri burada yapılabilir.
+                  //
                 } else if (value == 'settings') {
-                  // Ayarlar sayfasına yönlendirme işlemleri burada yapılabilir.
+                  //
                 } else if (value == 'logout') {
                   await Provider.of<WelcomeViewModel>(context, listen: false)
                       .signOut();
-                  Auth.loginState=false;
+                  Auth.loginState = false;
+                  Provider.of<WelcomeViewModel>(context, listen: false)
+                      .authStatus();
                 }
               },
               itemBuilder: (BuildContext context) => [
@@ -85,13 +97,6 @@ class _WelcomeViewState extends State<WelcomeView> {
                   onPressed: () {}, child: Text("GEÇMİŞ HESAPLAMALAR")),
               ElevatedButton(
                   onPressed: () {}, child: Text("GÜNLÜK KALORİ HESAPLA")),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LoginView()));
-                },
-                child: Text('ANA SAYFAYA DÖN'),
-              ),
               ElevatedButton(
                   onPressed: () async {
                     User? getUser;

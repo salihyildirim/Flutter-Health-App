@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:womenhealth/Model/user.dart';
 import 'package:womenhealth/Service/Auth.dart';
@@ -21,7 +22,32 @@ class WelcomeViewModel with ChangeNotifier {
   Future<void> signOut() async {
     await _auth.signOut();
   }
+
   Stream<firebase_auth.User?> authStatus() {
     return _auth.authStatus();
+  }
+
+  Future<User?> getCurrentUserDetails() async {
+    firebase_auth.User? currentUser = await _auth.getCurrentUser();
+    if (currentUser != null) {
+      Map<String, dynamic>? userData =
+          await _firestoreService.readData(currentUser.uid);
+
+      if (userData != null) {
+        return User.fromMap(userData);
+      }
+    }
+    return null;
+  }
+
+  Future<String?> getCurrentUserName() async {
+    firebase_auth.User? currentUser = await getCurrentUser();
+    if (currentUser != null) {
+      User? user = await getUser(currentUser.email.toString());
+      if (user != null) {
+        return user.name; // Kullanıcı adını ve soyadını döndür
+      }
+    }
+    return null;
   }
 }
