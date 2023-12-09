@@ -22,6 +22,19 @@ extension GenderExtension on SelectedGender {
     }
   }
 }
+SelectedGender stringToGender(String genderString) {
+  switch (genderString.toLowerCase()) {
+    case 'kadın':
+      return SelectedGender.female;
+    case 'erkek':
+      return SelectedGender.male;
+    case 'diger':
+      return SelectedGender.other;
+    default:
+      return SelectedGender.male; // Varsayılan olarak erkek seçiliyor
+  }
+}
+
 
 class UserInfoView extends StatefulWidget {
   final User user;
@@ -51,6 +64,7 @@ class _UserInfoViewState extends State<UserInfoView> {
     _lastName=widget.user.surName;
     _age=widget.user.yas;
     _kg=widget.user.kg;
+    _selectedGender = stringToGender(widget.user.cinsiyet);
 
 
 
