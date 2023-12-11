@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:womenhealth/Blocs/user/user_bloc.dart';
@@ -22,7 +21,7 @@ extension GenderExtension on SelectedGender {
     }
   }
 }
-SelectedGender stringToGender(String genderString) {
+SelectedGender stringToGender(String genderString) { //convert genterString
   switch (genderString.toLowerCase()) {
     case 'kadın':
       return SelectedGender.female;
