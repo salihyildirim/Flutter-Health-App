@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:womenhealth/Model/user.dart';
 import 'package:womenhealth/Service/Auth.dart';
+import 'package:womenhealth/View/foodView.dart';
 import 'package:womenhealth/View/userInfoView.dart';
 import 'package:womenhealth/ViewModel/welcomeViewModel.dart';
 
@@ -30,7 +31,8 @@ class _WelcomeViewState extends State<WelcomeView> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Text('HOŞGELDİN'); // Eğer ad alınana kadar bekle
               } else {
-                return Text('HOŞGELDİN ${snapshot.data?.toUpperCase()}'); // Kullanıcı adını göster
+                return Text(
+                    'HOŞGELDİN ${snapshot.data?.toUpperCase()}'); // Kullanıcı adını göster
               }
             },
           ),
@@ -96,7 +98,11 @@ class _WelcomeViewState extends State<WelcomeView> {
               ElevatedButton(
                   onPressed: () {}, child: Text("GEÇMİŞ HESAPLAMALAR")),
               ElevatedButton(
-                  onPressed: () {}, child: Text("GÜNLÜK KALORİ HESAPLA")),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => const FoodView()));
+                  },
+                  child: Text("GÜNLÜK KALORİ HESAPLA")),
               ElevatedButton(
                   onPressed: () async {
                     User? getUser;
