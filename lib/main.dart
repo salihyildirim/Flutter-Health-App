@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -8,22 +9,30 @@ import 'package:womenhealth/Service/Auth.dart';
 import 'package:womenhealth/View/loginView.dart';
 import 'package:womenhealth/View/welcomeView.dart';
 import 'package:womenhealth/ViewModel/loginViewModel.dart';
+import 'package:womenhealth/constants.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider<LoginViewModel>(
-          create: (context) => LoginViewModel(),
-        ),
-        BlocProvider<UserBloc>(
-          create: (context) => UserBloc(),
-        ),
-        // İhtiyaç duyulan diğer Provider'ları buraya ekleyebilirsiniz.
-      ],
-      child: MyApp(),
+    EasyLocalization(
+      supportedLocales: const [LocalConstants.enLocale,LocalConstants.trLocale],
+      path: LocalConstants.localePath,
+
+      fallbackLocale: LocalConstants.trLocale,
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider<LoginViewModel>(
+            create: (context) => LoginViewModel(),
+          ),
+          BlocProvider<UserBloc>(
+            create: (context) => UserBloc(),
+          ),
+          // İhtiyaç duyulan diğer Provider'ları buraya ekleyebilirsiniz.
+        ],
+        child: MyApp(),
+      ),
     ),
   );
 }
@@ -34,6 +43,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: context.localizationDelegates,
+      locale: context.locale,
+      supportedLocales: context.supportedLocales,
       title: 'Flutter Demo',
       theme: ThemeData(),
       home: MyHomePage(),
