@@ -3,11 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:womenhealth/Service/FirestoreService.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:womenhealth/Utils/data/local_food_database.dart';
 
 
 
 class FoodViewModel with ChangeNotifier{
   final FirestoreService _firestoreService = FirestoreService('foods');
+  LocalFood localFood=LocalFood();
+
 
   Future<void> createData(Map<String, dynamic> data) async {
     await _firestoreService.createData(data);
@@ -26,8 +29,8 @@ class FoodViewModel with ChangeNotifier{
   Future<void> deleteData(String documentId) async {
     await _firestoreService.deleteData(documentId);
   }
-  void fetchNutritionInfo() async {
-    String query = "Elma".tr().toString();
+  void fetchNutritionInfo(String food) async {
+    String query = food.toLowerCase().tr().toString();
     String encodedQuery = Uri.encodeQueryComponent(query);
     String apiKey = "fU9y72p/j2sGb2Tdw0j6/g==E0H80ltgZ4HNggFB";
 
@@ -46,6 +49,11 @@ class FoodViewModel with ChangeNotifier{
     } else {
       print('Request failed with status: ${response.statusCode}');
     }
+  }
+
+  Future<List<String>> getAllTurkishFoods() async {
+    List<String> foods = await localFood.turkceYemekler();
+    return foods;
   }
 
 }
