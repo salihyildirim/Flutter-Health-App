@@ -6,6 +6,7 @@ import 'package:womenhealth/Model/user.dart';
 import 'package:womenhealth/Service/Auth.dart';
 import 'package:womenhealth/View/foodView.dart';
 import 'package:womenhealth/View/userInfoView.dart';
+import 'package:womenhealth/ViewModel/foodViewModel.dart';
 import 'package:womenhealth/ViewModel/welcomeViewModel.dart';
 
 class WelcomeView extends StatefulWidget {
@@ -100,7 +101,7 @@ class _WelcomeViewState extends State<WelcomeView> {
               ElevatedButton(
                   onPressed: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => const FoodView()));
+                        MaterialPageRoute(builder: (context) =>  FoodView(foodViewModel: FoodViewModel(),)));
                   },
                   child: Text("GÜNLÜK KALORİ HESAPLA")),
               ElevatedButton(
