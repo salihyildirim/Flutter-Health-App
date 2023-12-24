@@ -17,6 +17,17 @@ class WelcomeView extends StatefulWidget {
 }
 
 class _WelcomeViewState extends State<WelcomeView> {
+  User? getUser;
+  late firebase_auth.User? currentUser;
+
+  Future<void> fetchCurrentUser(BuildContext context) async {
+    currentUser = await context.read<WelcomeViewModel>().getCurrentUser();
+    getUser = await context
+        .read<WelcomeViewModel>()
+        .getUser(currentUser!.email.toString());
+    setState(() {}); // State'i güncelle
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<WelcomeViewModel>(
@@ -100,19 +111,20 @@ class _WelcomeViewState extends State<WelcomeView> {
                   onPressed: () {}, child: Text("GEÇMİŞ HESAPLAMALAR")),
               ElevatedButton(
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) =>  FoodView(foodViewModel: FoodViewModel(),)));
+                    if (currentUser != null) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => FoodView(
+                                    foodViewModel: FoodViewModel(),user: getUser!,
+                                  )));
+                    }
                   },
                   child: Text("GÜNLÜK KALORİ HESAPLA")),
               ElevatedButton(
                   onPressed: () async {
-                    User? getUser;
-                    firebase_auth.User? currentUser =
-                        await context.read<WelcomeViewModel>().getCurrentUser();
+                    await fetchCurrentUser(context);
                     if (currentUser != null) {
-                      getUser = await context
-                          .read<WelcomeViewModel>()
-                          .getUser(currentUser.email.toString());
                       Navigator.push(
                           context,
                           MaterialPageRoute(

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:womenhealth/Model/food.dart';
+import 'package:womenhealth/Model/user.dart';
 import 'package:womenhealth/Utils/data/local_food_database.dart';
 import 'package:womenhealth/ViewModel/foodViewModel.dart';
 
 class FoodView extends StatefulWidget {
   final FoodViewModel foodViewModel; // FoodViewModel'i parametre olarak ekle
+  final User user;
 
-  const FoodView({Key? key, required this.foodViewModel}) : super(key: key);
+  const FoodView({Key? key, required this.foodViewModel, required this.user}) : super(key: key);
 
   @override
   State<FoodView> createState() => _FoodViewState();

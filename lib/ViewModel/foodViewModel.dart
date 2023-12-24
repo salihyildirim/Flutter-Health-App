@@ -29,7 +29,7 @@ class FoodViewModel with ChangeNotifier{
   Future<void> deleteData(String documentId) async {
     await _firestoreService.deleteData(documentId);
   }
-  void fetchNutritionInfo(String food) async {
+  Future<http.Response?> fetchNutritionInfo(String food) async {
     String query = food.toLowerCase().tr().toString();
     String encodedQuery = Uri.encodeQueryComponent(query);
     String apiKey = "fU9y72p/j2sGb2Tdw0j6/g==E0H80ltgZ4HNggFB";
@@ -44,12 +44,17 @@ class FoodViewModel with ChangeNotifier{
     );
 
     if (response.statusCode == 200) {
-      print(response.body); // Cevabı konsola yazdırın
+      return response;// Cevabı konsola yazdırın
       // İşlemlerinize devam edebilirsiniz
     } else {
       print('Request failed with status: ${response.statusCode}');
+      return null;
+
     }
   }
+
+
+
 
   Future<List<String>> getAllTurkishFoods() async {
     List<String> foods = await localFood.turkceYemekler();
