@@ -18,7 +18,8 @@ class WelcomeView extends StatefulWidget {
 
 class _WelcomeViewState extends State<WelcomeView> {
   User? getUser;
-  late firebase_auth.User? currentUser;
+  firebase_auth.User? currentUser;
+
 
   Future<void> fetchCurrentUser(BuildContext context) async {
     currentUser = await context.read<WelcomeViewModel>().getCurrentUser();
@@ -34,111 +35,122 @@ class _WelcomeViewState extends State<WelcomeView> {
       create: (context) {
         return WelcomeViewModel();
       },
-      builder: (context, _) => Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: FutureBuilder<String?>(
-            future: Provider.of<WelcomeViewModel>(context).getCurrentUserName(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Text('HOŞGELDİN'); // Eğer ad alınana kadar bekle
-              } else {
-                return Text(
-                    'HOŞGELDİN ${snapshot.data?.toUpperCase()}'); // Kullanıcı adını göster
-              }
-            },
-          ),
-          actions: [
-            PopupMenuButton<String>(
-              offset: Offset(0, kToolbarHeight),
-              // Menüyü App Bar'ın altında başlatır
-              onSelected: (value) async {
-                //
-                if (value == 'edit') {
-                  //
-                } else if (value == 'settings') {
-                  //
-                } else if (value == 'logout') {
-                  await Provider.of<WelcomeViewModel>(context, listen: false)
-                      .signOut();
-                  Auth.loginState = false;
-                  Provider.of<WelcomeViewModel>(context, listen: false)
-                      .authStatus();
-                }
-              },
-              itemBuilder: (BuildContext context) => [
-                PopupMenuItem<String>(
-                  value: 'edit',
-                  child: ListTile(
-                    tileColor: Colors.blue,
-                    // Menü arka plan rengi
-                    leading: Icon(Icons.edit, color: Colors.white),
-                    // Ikon rengi
-                    title: Text('Düzenle',
-                        style: TextStyle(color: Colors.white)), // Yazı rengi
-                  ),
-                ),
-                PopupMenuItem<String>(
-                  value: 'settings',
-                  child: ListTile(
-                    tileColor: Colors.blue,
-                    // Menü arka plan rengi
-                    leading: Icon(Icons.settings, color: Colors.white),
-                    // Ikon rengi
-                    title: Text('Ayarlar',
-                        style: TextStyle(color: Colors.white)), // Yazı rengi
-                  ),
-                ),
-                PopupMenuItem<String>(
-                  value: 'logout',
-                  child: ListTile(
-                    tileColor: Colors.blue,
-                    // Menü arka plan rengi
-                    leading: Icon(Icons.logout, color: Colors.white),
-                    // Ikon rengi
-                    title: Text('Çıkış Yap',
-                        style: TextStyle(color: Colors.white)), // Yazı rengi
-                  ),
+      builder: (context, _) =>
+          Scaffold(
+            appBar: AppBar(
+              centerTitle: true,
+              title: FutureBuilder<String?>(
+                future: Provider.of<WelcomeViewModel>(context)
+                    .getCurrentUserName(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Text('HOŞGELDİN'); // Eğer ad alınana kadar bekle
+                  } else {
+                    return Text(
+                        'HOŞGELDİN ${snapshot.data
+                            ?.toUpperCase()}'); // Kullanıcı adını göster
+                  }
+                },
+              ),
+              actions: [
+                PopupMenuButton<String>(
+                  offset: Offset(0, kToolbarHeight),
+                  // Menüyü App Bar'ın altında başlatır
+                  onSelected: (value) async {
+                    //
+                    if (value == 'edit') {
+                      //
+                    } else if (value == 'settings') {
+                      //
+                    } else if (value == 'logout') {
+                      await Provider.of<WelcomeViewModel>(
+                          context, listen: false)
+                          .signOut();
+                      Auth.loginState = false;
+                      Provider.of<WelcomeViewModel>(context, listen: false)
+                          .authStatus();
+                    }
+                  },
+                  itemBuilder: (BuildContext context) =>
+                  [
+                    const PopupMenuItem<String>(
+                      value: 'edit',
+                      child: ListTile(
+                        tileColor: Colors.blue,
+                        // Menü arka plan rengi
+                        leading: Icon(Icons.edit, color: Colors.white),
+                        // Ikon rengi
+                        title: Text('Düzenle',
+                            style: TextStyle(
+                                color: Colors.white)), // Yazı rengi
+                      ),
+                    ),
+                    const PopupMenuItem<String>(
+                      value: 'settings',
+                      child: ListTile(
+                        tileColor: Colors.blue,
+                        // Menü arka plan rengi
+                        leading: Icon(Icons.settings, color: Colors.white),
+                        // Ikon rengi
+                        title: Text('Ayarlar',
+                            style: TextStyle(
+                                color: Colors.white)), // Yazı rengi
+                      ),
+                    ),
+                    const PopupMenuItem<String>(
+                      value: 'logout',
+                      child: ListTile(
+                        tileColor: Colors.blue,
+                        // Menü arka plan rengi
+                        leading: Icon(Icons.logout, color: Colors.white),
+                        // Ikon rengi
+                        title: Text('Çıkış Yap',
+                            style: TextStyle(
+                                color: Colors.white)), // Yazı rengi
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
-        body: Center(
-          child: Column(
-            children: [
-              ElevatedButton(
-                  onPressed: () {}, child: Text("GEÇMİŞ HESAPLAMALAR")),
-              ElevatedButton(
-                  onPressed: () {
-                    if (currentUser != null) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => FoodView(
-                                    foodViewModel: FoodViewModel(),user: getUser!,
-                                  )));
-                    }
-                  },
-                  child: Text("GÜNLÜK KALORİ HESAPLA")),
-              ElevatedButton(
-                  onPressed: () async {
-                    await fetchCurrentUser(context);
-                    if (currentUser != null) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  UserInfoView(user: getUser!)));
-                    } else {
-                      print("Kullanici yok");
-                    }
-                  },
-                  child: Text('Bilgilerimi Güncelle'))
+            body: Center(
+                child: Column(
+                    children: [
+                    ElevatedButton(
+                    onPressed: () {}, child: Text("GEÇMİŞ HESAPLAMALAR")),
+            ElevatedButton(
+                onPressed: () async {
+                  await fetchCurrentUser(context);
+                  if (currentUser != null) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                FoodView(
+                                  foodViewModel: FoodViewModel(),
+                                  user: getUser!,
+                                )));
+                  }
+                },
+                child: Text("GÜNLÜK KALORİ HESAPLA")),
+            ElevatedButton(
+                onPressed: () async {
+                  await fetchCurrentUser(context);
+                  if (currentUser != null) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                UserInfoView(user: getUser!)));
+                  } else {
+                    print("Kullanici yok");
+                  }
+                },
+                child: Text('Bilgilerimi Güncelle')),
             ],
           ),
-        ),
-      ),
+    ),)
+    ,
     );
   }
 }

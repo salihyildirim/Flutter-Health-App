@@ -9,7 +9,8 @@ class FoodView extends StatefulWidget {
   final FoodViewModel foodViewModel; // FoodViewModel'i parametre olarak ekle
   final User user;
 
-  const FoodView({Key? key, required this.foodViewModel, required this.user}) : super(key: key);
+  const FoodView({Key? key, required this.foodViewModel, required this.user})
+      : super(key: key);
 
   @override
   State<FoodView> createState() => _FoodViewState();
@@ -28,8 +29,8 @@ class _FoodViewState extends State<FoodView> {
   void filterFoods(String query) {
     setState(() {
       filteredFoods = foods
-          .where(
-              (food) => food.food_name.toLowerCase().contains(query.toLowerCase()))
+          .where((food) =>
+              food.food_name.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
@@ -65,6 +66,13 @@ class _FoodViewState extends State<FoodView> {
         child: Column(
           children: [
             Expanded(
+                child: ElevatedButton(
+              onPressed: () async {
+                await widget.foodViewModel.processControl();
+              },
+              child: Text('DENEME'),
+            )),
+            Expanded(
               child: ListView.builder(
                 itemCount: filteredFoods.length,
                 itemBuilder: (context, index) {
@@ -74,8 +82,8 @@ class _FoodViewState extends State<FoodView> {
                     ),
                     trailing: IconButton(
                       icon: Icon(Icons.add),
-                      onPressed: () {
-                      context.read<FoodViewModel>().fetchNutritionInfo(filteredFoods[index].food_name);
+                      onPressed: () async {
+                        //context.read<FoodViewModel>().fetchNutritionInfo(filteredFoods[index].food_name);
                       },
                     ),
                   );
