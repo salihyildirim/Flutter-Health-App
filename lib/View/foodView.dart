@@ -66,13 +66,6 @@ class _FoodViewState extends State<FoodView> {
         child: Column(
           children: [
             Expanded(
-                child: ElevatedButton(
-              onPressed: () async {
-                await widget.foodViewModel.processControl();
-              },
-              child: Text('DENEME'),
-            )),
-            Expanded(
               child: ListView.builder(
                 itemCount: filteredFoods.length,
                 itemBuilder: (context, index) {
@@ -84,6 +77,8 @@ class _FoodViewState extends State<FoodView> {
                       icon: Icon(Icons.add),
                       onPressed: () async {
                         //context.read<FoodViewModel>().fetchNutritionInfo(filteredFoods[index].food_name);
+                        //1-tıklanan indexli food'u api'den çek. çekilen json'dan calories degerini çek.
+                        //2-burada User'in UserDiet'inin calories_taken ozelligine ekle.
                       },
                     ),
                   );
