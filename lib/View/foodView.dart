@@ -79,6 +79,8 @@ class _FoodViewState extends State<FoodView> {
                         //context.read<FoodViewModel>().fetchNutritionInfo(filteredFoods[index].food_name);
                         //1-tıklanan indexli food'u api'den çek. çekilen json'dan calories degerini çek.
                         //2-burada User'in UserDiet'inin calories_taken ozelligine ekle.
+                         widget.foodViewModel.addCaloriesTaken(widget.user,filteredFoods[index].food_name);
+                      print(widget.user.userDiet?.calories_taken.toString());
                       },
                     ),
                   );

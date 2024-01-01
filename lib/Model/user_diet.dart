@@ -1,12 +1,13 @@
 class UserDiet {
-  double? calories_taken;
-  double? calories_given;
+  double calories_taken;
+  double calories_given;
   double summation;
   DateTime calculation_date;
 
-  UserDiet(
-      {this.calories_taken,
-      this.calories_given,
-      required this.summation,
-      required this.calculation_date});
+  UserDiet({
+    this.calories_taken = 0,
+    this.calories_given = 0,
+    this.summation=0,
+    required this.calculation_date,
+  });
 }
