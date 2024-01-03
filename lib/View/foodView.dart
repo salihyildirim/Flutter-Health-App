@@ -69,23 +69,26 @@ class _FoodViewState extends State<FoodView> {
               child: ListView.builder(
                 itemCount: filteredFoods.length,
                 itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(
-                      "${filteredFoods[index].food_name} ${filteredFoods[index].food_calory}",
-                    ),
-                    trailing: IconButton(
-                      icon: Icon(Icons.add),
-                      onPressed: () async {
-                        //context.read<FoodViewModel>().fetchNutritionInfo(filteredFoods[index].food_name);
-                        //1-tıklanan indexli food'u api'den çek. çekilen json'dan calories degerini çek.
-                        //2-burada User'in UserDiet'inin calories_taken ozelligine ekle.
-                         widget.foodViewModel.addCaloriesTaken(widget.user,filteredFoods[index].food_name);
-                      print(widget.user.userDiet?.calories_taken.toString());
-                      },
-                    ),
+                  return FutureBuilder<double?>(
+                    future: widget.foodViewModel.getCaloriesFromFood(filteredFoods[index].food_name),
+                    builder: (BuildContext context, AsyncSnapshot<double?> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator(); // Ya da herhangi bir yükleme göstergesi.
+                      } else if (snapshot.hasError) {
+                        return Text('Hata: ${snapshot.error}');
+                      } else {
+                        return ListTile(
+                          title: Text(
+                            "${filteredFoods[index].food_name} ${snapshot.data ?? 'Veri bulunamadı'}",
+                          ),
+                          // ... (ListTile içeriğinin geri kalanı)
+                        );
+                      }
+                    },
                   );
                 },
               ),
+
             ),
           ],
         ),
