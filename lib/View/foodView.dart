@@ -30,7 +30,7 @@ class _FoodViewState extends State<FoodView> {
     setState(() {
       filteredFoods = foods
           .where((food) =>
-              food.food_name.toLowerCase().contains(query.toLowerCase()))
+          food.food_name.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
@@ -65,34 +65,40 @@ class _FoodViewState extends State<FoodView> {
         create: (BuildContext context) => FoodViewModel(),
         child: Column(
           children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: filteredFoods.length,
-                itemBuilder: (context, index) {
-                  return FutureBuilder<double?>(
-                    future: widget.foodViewModel.getCaloriesFromFood(filteredFoods[index].food_name),
-                    builder: (BuildContext context, AsyncSnapshot<double?> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator(); // Ya da herhangi bir yükleme göstergesi.
-                      } else if (snapshot.hasError) {
-                        return Text('Hata: ${snapshot.error}');
-                      } else {
-                        return ListTile(
-                          title: Text(
-                            "${filteredFoods[index].food_name} ${snapshot.data ?? 'Veri bulunamadı'}",
-                          ),
-                          // ... (ListTile içeriğinin geri kalanı)
-                        );
-                      }
-                    },
+        Expanded(
+        child: ListView.builder(
+        itemCount: filteredFoods.length,
+          itemBuilder: (context, index) {
+            return FutureBuilder<double?>(
+              future: widget.foodViewModel.getCaloriesFromFood(
+                  filteredFoods[index].food_name),
+              builder: (BuildContext context, AsyncSnapshot<double?> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator()); // Ya da herhangi bir yükleme göstergesi.
+                } else if (snapshot.hasError) {
+                  return Text('Hata: ${snapshot.error}');
+                } else {
+                  return ListTile(
+                    title: Text(
+                      "${filteredFoods[index].food_name} ${snapshot.data ??
+                          'Veri bulunamadı'}",
+                    ),
+                    // ... (ListTile içeriğinin geri kalanı)
                   );
-                },
-              ),
-
-            ),
-          ],
+                }
+              },
+            );
+          },
         ),
+
       ),
+      MaterialButton(
+        onPressed: () {
+          widget.foodViewModel.removeNullValues();
+        }, child: Text("LIST NOW"),),
+      ],
+    ),)
+    ,
     );
   }
 }
