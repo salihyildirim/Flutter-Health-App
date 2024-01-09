@@ -19,7 +19,6 @@ class FoodViewModel with ChangeNotifier {
     "buttermilk",
     "kefir",
     "goat milk",
-    "non-dairy milk",
     "soy milk",
     "almond milk",
     "rice milk",
@@ -1436,24 +1435,27 @@ class FoodViewModel with ChangeNotifier {
     return null;
   }
 
-  Future<void> removeNullValues() async {
-    List<String> foodsToRemove = [];
+  // Future<void> removeNullValues() async {
+  //   List<String> foodsToRemove = [];
+  //
+  //   for (var food in foods) {
+  //     var calories = await getCaloriesFromFood(food);
+  //     if (calories == null) {
+  //       foodsToRemove.add(food);
+  //     }
+  //   }
+  //
+  //   // Test etmek için konsola yazdırabiliriz
+  //   print("Yanit Yok Listesi :");
+  //   print(foodsToRemove);
+  // }
 
-    for (var food in foods) {
-      var calories = await getCaloriesFromFood(food);
-      if (calories == null) {
-        foodsToRemove.add(food);
-      }
-    }
+  void addCaloriesTaken(User user, String foodName, int gram) async {
+    double? caloriesPer100Gram = await getCaloriesFromFood(foodName);
 
-    // Test etmek için konsola yazdırabiliriz
-    print("Yanit Yok Listesi :");
-    print(foodsToRemove);
-  }
+    if (caloriesPer100Gram != null) {
+      double newCalories = (caloriesPer100Gram / 100) * gram;
 
-  void addCaloriesTaken(User user, String foodName) async {
-    double? newCalories = await getCaloriesFromFood(foodName);
-    if (newCalories != null) {
       if (user.userDiet == null) {
         UserDiet userDiet = UserDiet(
           calories_taken: newCalories,
@@ -1466,6 +1468,7 @@ class FoodViewModel with ChangeNotifier {
       }
     }
   }
+
 
   Future<List<String>> getAllTurkishFoods() async {
     List<String> foods = await localFood.turkceYemekler();
