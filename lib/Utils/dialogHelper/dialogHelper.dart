@@ -6,7 +6,7 @@ import 'package:womenhealth/ViewModel/foodViewModel.dart';
 class DialogHelper {
 
   static void showGramDialog(BuildContext context, Food food, FoodViewModel foodViewModel,User user) {
-    int grams = 0; // Varsayılan gram değeri
+    int grams = 0;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -30,7 +30,7 @@ class DialogHelper {
                 children: [
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).pop(); // Vazgeç butonu
+                      Navigator.of(context).pop();
                     },
                     child: Text('Vazgeç'),
                   ),

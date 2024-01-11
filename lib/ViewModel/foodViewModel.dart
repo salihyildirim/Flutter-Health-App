@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:womenhealth/Utils/data/local_food_database.dart';
 
 class FoodViewModel with ChangeNotifier {
-  final FirestoreService _firestoreService = FirestoreService('foods');
+  final FirestoreService _firestoreService = FirestoreService('userdiet');
   LocalFood localFood = LocalFood();
   final nutritionApiKey = "fU9y72p/j2sGb2Tdw0j6/g==E0H80ltgZ4HNggFB";
 
@@ -1375,20 +1375,20 @@ class FoodViewModel with ChangeNotifier {
     "bread"
   ];
 
-  Future<void> createData(Map<String, dynamic> data) async {
-    await _firestoreService.createData(data);
+  Future<void> createDataWithCustomId(Map<String, dynamic> data,String documentId) async {
+    await _firestoreService.createDataWithCustomId(documentId, data);
   }
 
-  Future<Map<String, dynamic>?> readData(String documentId) async {
+  Future<Map<String, dynamic>?> readUserDiet(String documentId) async {
     return await _firestoreService.readData(documentId);
   }
 
-  Future<void> updateData(
-      String documentId, Map<String, dynamic> newData) async {
+  Future<void> updateUserDiet(String documentId,
+      Map<String, dynamic> newData) async {
     await _firestoreService.updateData(documentId, newData);
   }
 
-  Future<void> deleteData(String documentId) async {
+  Future<void> deleteUserDiet(String documentId) async {
     await _firestoreService.deleteData(documentId);
   }
 
@@ -1407,7 +1407,7 @@ class FoodViewModel with ChangeNotifier {
     );
 
     if (response.statusCode == 200) {
-      return response.body; // Response'un body değerini döndür
+      return response.body;
     } else {
       return null;
     }
@@ -1451,11 +1451,14 @@ class FoodViewModel with ChangeNotifier {
   // }
 
   void addCaloriesTaken(User user, String foodName, int gram) async {
+    UserDiet? gettingUserDiet= await fetchUserDiet(user.eMail);
+    user.userDiet=gettingUserDiet;
+
     double? caloriesPer100Gram = await getCaloriesFromFood(foodName);
 
     if (caloriesPer100Gram != null) {
       double newCalories = (caloriesPer100Gram / 100) * gram;
-
+//read data, eğer yoksa create
       if (user.userDiet == null) {
         UserDiet userDiet = UserDiet(
           calories_taken: newCalories,
@@ -1466,41 +1469,43 @@ class FoodViewModel with ChangeNotifier {
         user.userDiet!.calories_taken =
             (user.userDiet!.calories_taken ?? 0) + newCalories;
       }
+      //user.userDiet 'i database'e kaydet.
+      updateUserDiet(user.eMail,user.userDiet!.toMap());
+
+    }
+    print(user.userDiet?.calories_taken.toString());
+  }
+
+  Future<UserDiet?> fetchUserDiet(String documentId) async {
+    Map<String, dynamic>? userDietMap = await readUserDiet(documentId);
+    if (userDietMap != null) {
+      UserDiet userDiet = UserDiet.fromMap(userDietMap);
+      return userDiet;
+    }
+    else {
+      return null;
+      print("userDiet çekilemedi.");
     }
   }
 
-
-  Future<List<String>> getAllTurkishFoods() async {
-    List<String> foods = await localFood.turkceYemekler();
-    return foods;
-  }
-
-  Future<void> processControl() async {
-    for (var item in foods) {
-      await fetchAndDeleteIfNull(item);
+    Future<List<String>> getAllTurkishFoods() async {
+      List<String> foods = await localFood.turkceYemekler();
+      return foods;
     }
-  }
 
-  Future<void> fetchAndDeleteIfNull(String food) async {
-    String? response = await fetchNutritionBody(food);
 
-    if (response == null || checkNameEquality(response, food)) {
-      print(food);
-    }
-  }
+    bool checkNameEquality(String response, String food) {
+      var jsonResponse = json.decode(response);
 
-  bool checkNameEquality(String response, String food) {
-    var jsonResponse = json.decode(response);
+      if (jsonResponse is Map<String, dynamic> &&
+          jsonResponse.containsKey('name')) {
+        var name = jsonResponse['name'];
 
-    if (jsonResponse is Map<String, dynamic> &&
-        jsonResponse.containsKey('name')) {
-      var name = jsonResponse['name'];
-
-      if (name is String) {
-        return name.toLowerCase() != food.toLowerCase();
+        if (name is String) {
+          return name.toLowerCase() != food.toLowerCase();
+        }
       }
-    }
 
-    return false;
+      return false;
+    }
   }
-}

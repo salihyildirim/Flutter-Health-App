@@ -13,6 +13,15 @@ class FirestoreService {
       print('Veri ekleme hatası: $e');
     }
   }
+  Future<void> createDataWithCustomId(String documentId, Map<String, dynamic> data) async {
+    try {
+      await _firestore.collection(collectionName).doc(documentId).set(data);
+      print('Belge oluşturuldu: $documentId');
+    } catch (e) {
+      print('Veri ekleme hatası: $e');
+    }
+  }
+
 
   Future<Map<String, dynamic>?> readData(String documentId) async {
     try {
