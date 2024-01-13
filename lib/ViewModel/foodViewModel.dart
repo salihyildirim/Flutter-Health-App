@@ -1375,7 +1375,8 @@ class FoodViewModel with ChangeNotifier {
     "bread"
   ];
 
-  Future<void> createDataWithCustomId(Map<String, dynamic> data,String documentId) async {
+  Future<void> createDataWithCustomId(
+      Map<String, dynamic> data, String documentId) async {
     await _firestoreService.createDataWithCustomId(documentId, data);
   }
 
@@ -1383,8 +1384,8 @@ class FoodViewModel with ChangeNotifier {
     return await _firestoreService.readData(documentId);
   }
 
-  Future<void> updateUserDiet(String documentId,
-      Map<String, dynamic> newData) async {
+  Future<void> updateUserDiet(
+      String documentId, Map<String, dynamic> newData) async {
     await _firestoreService.updateData(documentId, newData);
   }
 
@@ -1449,16 +1450,25 @@ class FoodViewModel with ChangeNotifier {
   //   print("Yanit Yok Listesi :");
   //   print(foodsToRemove);
   // }
+  Future<UserDiet?> fetchUserDiet(String documentId) async {
+    Map<String, dynamic>? userDietMap = await readUserDiet(documentId);
+    if (userDietMap != null) {
+      UserDiet userDiet = UserDiet.fromMap(userDietMap);
+      return userDiet;
+    } else {
+      return null;
+      print("userDiet çekilemedi.");
+    }
+  }
 
   void addCaloriesTaken(User user, String foodName, int gram) async {
-    UserDiet? gettingUserDiet= await fetchUserDiet(user.eMail);
-    user.userDiet=gettingUserDiet;
+    UserDiet? gettingUserDiet = await fetchUserDiet(user.eMail);
+    user.userDiet = gettingUserDiet;
 
     double? caloriesPer100Gram = await getCaloriesFromFood(foodName);
 
     if (caloriesPer100Gram != null) {
       double newCalories = (caloriesPer100Gram / 100) * gram;
-//read data, eğer yoksa create
       if (user.userDiet == null) {
         UserDiet userDiet = UserDiet(
           calories_taken: newCalories,
@@ -1468,31 +1478,17 @@ class FoodViewModel with ChangeNotifier {
       } else {
         user.userDiet!.calories_taken =
             (user.userDiet!.calories_taken ?? 0) + newCalories;
+
+        //user.userDiet 'i database'e kaydet.
+        updateUserDiet(user.eMail, user.userDiet!.toMap());
       }
-      //user.userDiet 'i database'e kaydet.
-      updateUserDiet(user.eMail,user.userDiet!.toMap());
-
-    }
-    print(user.userDiet?.calories_taken.toString());
-  }
-
-  Future<UserDiet?> fetchUserDiet(String documentId) async {
-    Map<String, dynamic>? userDietMap = await readUserDiet(documentId);
-    if (userDietMap != null) {
-      UserDiet userDiet = UserDiet.fromMap(userDietMap);
-      return userDiet;
-    }
-    else {
-      return null;
-      print("userDiet çekilemedi.");
+      print(user.userDiet?.calories_taken.toString());
     }
   }
-
     Future<List<String>> getAllTurkishFoods() async {
       List<String> foods = await localFood.turkceYemekler();
       return foods;
     }
-
 
     bool checkNameEquality(String response, String food) {
       var jsonResponse = json.decode(response);
@@ -1509,3 +1505,6 @@ class FoodViewModel with ChangeNotifier {
       return false;
     }
   }
+
+
+
