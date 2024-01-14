@@ -1475,6 +1475,8 @@ class FoodViewModel with ChangeNotifier {
           calculation_date: DateTime.now(),
         );
         user.userDiet = userDiet;
+        createDataWithCustomId(user.userDiet!.toMap(),user.eMail);
+        //tam burada yeni oluşturduğumuz userdiet'i kaydet.
       } else {
         user.userDiet!.calories_taken =
             (user.userDiet!.calories_taken ?? 0) + newCalories;

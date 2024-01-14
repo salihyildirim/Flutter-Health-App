@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:womenhealth/Model/food.dart';
 import 'package:womenhealth/Model/user.dart';
 import 'package:womenhealth/Utils/dialogHelper/dialogHelper.dart';
+import 'package:womenhealth/View/sportView.dart';
 import 'package:womenhealth/ViewModel/foodViewModel.dart';
 
 class FoodView extends StatefulWidget {
@@ -80,7 +81,11 @@ class _FoodViewState extends State<FoodView> {
                           "${filteredFoods[index].food_name} ${snapshot.data ?? 'Veri bulunamadı'}",
                         ),
                         onTap: () {
-                          DialogHelper.showGramDialog(context, filteredFoods[index],widget.foodViewModel,widget.user);
+                          DialogHelper.showGramDialog(
+                              context,
+                              filteredFoods[index],
+                              widget.foodViewModel,
+                              widget.user);
                         },
                       );
                     },
@@ -88,9 +93,10 @@ class _FoodViewState extends State<FoodView> {
                 },
               ),
             ),
-            MaterialButton(
+              MaterialButton(
               onPressed: () {
-                  //go sport page
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SportView()));
               },
               child: Text("ILERI"),
             ),
