@@ -1475,7 +1475,7 @@ class FoodViewModel with ChangeNotifier {
           calculation_date: DateTime.now(),
         );
         user.userDiet = userDiet;
-        createDataWithCustomId(user.userDiet!.toMap(),user.eMail);
+        createDataWithCustomId(user.userDiet!.toMap(), user.eMail);
         //tam burada yeni oluşturduğumuz userdiet'i kaydet.
       } else {
         user.userDiet!.calories_taken =
@@ -1487,26 +1487,26 @@ class FoodViewModel with ChangeNotifier {
       print(user.userDiet?.calories_taken.toString());
     }
   }
-    Future<List<String>> getAllTurkishFoods() async {
-      List<String> foods = await localFood.turkceYemekler();
-      return foods;
-    }
 
-    bool checkNameEquality(String response, String food) {
-      var jsonResponse = json.decode(response);
+  Future<List<String>> getAllTurkishFoods() async {
+    List<String> foods = await localFood.turkceYemekler();
+    return foods;
+  }
 
-      if (jsonResponse is Map<String, dynamic> &&
-          jsonResponse.containsKey('name')) {
-        var name = jsonResponse['name'];
+  bool checkNameEquality(String response, String food) {
+    var jsonResponse = json.decode(response);
 
-        if (name is String) {
-          return name.toLowerCase() != food.toLowerCase();
-        }
+    if (jsonResponse is Map<String, dynamic> &&
+        jsonResponse.containsKey('name')) {
+      var name = jsonResponse['name'];
+
+      if (name is String) {
+        return name.toLowerCase() != food.toLowerCase();
       }
-
-      return false;
     }
+
+    return false;
   }
 
 
-
+}

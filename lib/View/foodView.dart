@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:translator_plus/translator_plus.dart';
 import 'package:womenhealth/Model/food.dart';
 import 'package:womenhealth/Model/user.dart';
 import 'package:womenhealth/Utils/dialogHelper/dialogHelper.dart';
@@ -20,6 +21,8 @@ class FoodView extends StatefulWidget {
 class _FoodViewState extends State<FoodView> {
   late List<Food> foods = [];
   late List<Food> filteredFoods = [];
+  GoogleTranslator translator = GoogleTranslator();
+  String textt= "Hello World";
 
   @override
   void initState() {
@@ -93,7 +96,8 @@ class _FoodViewState extends State<FoodView> {
                 },
               ),
             ),
-              MaterialButton(
+            Text(textt),
+            MaterialButton(
               onPressed: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => SportView()));
@@ -105,4 +109,5 @@ class _FoodViewState extends State<FoodView> {
       ),
     );
   }
+
 }
