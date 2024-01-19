@@ -16,7 +16,7 @@ class _SportViewState extends State<SportView> {
       create: (BuildContext context) {
         return SportViewModel();
       },
-      child: Scaffold(
+      builder: (context,child)=> Scaffold(
         appBar: AppBar(
           title: Text("Sport View"),
         ),
@@ -29,15 +29,13 @@ class _SportViewState extends State<SportView> {
             ),
             ElevatedButton(
               onPressed: () async{
-                String? sonuc = await context
-                    .read<SportViewModel>()
-                    .fetchNutritionBody("skiing");
+                context.read<SportViewModel>().digerSporlariEle();
 
-               String turkce= await context
-                    .read<SportViewModel>()
-                    .translateToTurkish(sonuc!);
-
-               print(turkce);
+               // String turkce= await context
+               //      .read<SportViewModel>()
+               //      .translateToTurkish(sonuc);
+               //
+               // print("turkcesi: $turkce");
 
               },
               child: Text("Your Button"),
@@ -79,6 +77,7 @@ class _SportViewState extends State<SportView> {
             TextButton(
               child: Text('Cancel'),
               onPressed: () {
+
                 Navigator.of(context).pop();
               },
             ),
