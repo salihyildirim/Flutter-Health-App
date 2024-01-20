@@ -29,7 +29,7 @@ class _SportViewState extends State<SportView> {
             ),
             ElevatedButton(
               onPressed: () async{
-                context.read<SportViewModel>().digerSporlariEle();
+                // context.read<SportViewModel>().digerSporlariEle();
 
                // String turkce= await context
                //      .read<SportViewModel>()

@@ -8,103 +8,53 @@ class SportViewModel with ChangeNotifier {
   GoogleTranslator translator = GoogleTranslator();
   final nutritionApiKey = "fU9y72p/j2sGb2Tdw0j6/g==E0H80ltgZ4HNggFB";
 
-  // sports_list.dart
-
   List<String> sportsList = [
-    "Acrobatics",
-    "Aerobic Gymnastics",
     "Archery",
-    "Arnis",
-    "Artistic Gymnastics",
-    "Artistic Swimming",
     "Badminton",
+    "Football",
+    "Softball",
     "Baseball",
     "Basketball",
-    "Baton Twirling",
-    "Bicycle Motocross (BMX)",
-    "Billiards/ Pool (U.S.)",
-    "Bobsleigh",
-    "Bodybuilding",
+    "Soccer",
     "Bowling",
-    "Boxing",
-    "Canoeing",
-    "Car Racing",
-    "Cheerleading",
-    "Chess",
     "Cricket",
+    "Shuffleboard",
+    "Boxing",
+    "Martial arts",
+    "Camping",
+    "Whitewater rafting",
     "Croquet",
     "Curling",
-    "Dance Sport",
     "Darts",
     "Diving",
-    "Dodgeball",
+    "Children's games",
     "Fencing",
-    "Figure Skating",
-    "Football (U.K)/ Soccer (U.S., Australia)",
     "Frisbee",
     "Golf",
     "Handball",
-    "Hang Gliding",
     "Hockey",
-    "Horseback Riding",
-    "Horse Racing",
-    "Ice Hockey",
-    "Ice Skating",
-    "Jet Ski Racing",
-    "Judo",
-    "Karate",
+    "Horseback riding",
+    "Horse racing",
+    "Skating",
     "Kayaking",
-    "Kendo",
-    "Kick Boxing",
-    "Kite Surfing",
     "Lacrosse",
-    "Luge",
-    "Mixed Martial Arts",
-    "Motocross",
-    "Muay Thai",
-    "Paintball",
-    "Parachuting",
-    "Paragliding",
-    "Parkour",
+    "Sledding",
     "Polo",
-    "Pool/Billiards",
-    "Powerlifting",
-    "Rafting",
-    "Rhythmic Gymnastics",
-    "Rock Climbing",
-    "Rowing",
+    "Climbing",
+    "Rowing machine",
+    "Canoeing",
     "Rugby",
-    "Sailing",
-    "Sandboarding",
-    "Scuba Diving",
-    "Shooting",
-    "Skateboarding",
-    "Skeleton",
-    "Skiing",
-    "Snowboarding",
-    "Softball",
-    "Speed Skating",
-    "Sport Climbing",
-    "Squash",
-    "Sumo Wrestling",
-    "Surfing",
-    "Swimming",
-    "Synchronized Skating",
-    "Synchronized Swimming",
-    "Table Tennis",
-    "Taekwondo",
-    "Tennis",
-    "Track and Field",
-    "Trampolining",
-    "Triathlon (Tetrathlon, etc.)",
-    "Tug of War",
-    "Volleyball",
-    "Water Polo",
-    "Weightlifting",
     "Windsurfing",
-    "Wrestling",
-    "Wu Shu",
+    "Sailing",
+    "Skateboarding",
+    "Skiing",
+    "Squash",
+    "Swimming",
+    "Table tennis",
+    "Track and field",
+    "Volleyball",
   ];
+
 
   Future<String> translateToTurkish(String text) async {
     try {
@@ -157,15 +107,14 @@ class SportViewModel with ChangeNotifier {
     return null;
   }
 
-  void digerSporlariEle() async {
-    for (var item in sportsList) {
-      String? sonuc = await fetchActivitiesResponseBody(item, 100, 60);
-      if (sonuc != null) {
-        // Sonuç içerisinde bulunan "name" değerini yazdır
-        printNameFromJson(sonuc);
-      }
-    }
-  }
+  // void digerSporlariEle() async {
+  //   for (var item in sportsList) {
+  //     String? sonuc = await fetchActivitiesResponseBody(item, 100, 60);
+  //     if (sonuc != null) {
+  //       printNameFromJson(sonuc);
+  //     }
+  //   }
+  // }
 
   void printNameFromJson(String jsonStr) {
     List<dynamic> activities = json.decode(jsonStr);
