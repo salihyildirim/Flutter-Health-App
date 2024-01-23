@@ -81,7 +81,7 @@ class _FoodViewState extends State<FoodView> {
                         AsyncSnapshot<double?> snapshot) {
                       return ListTile(
                         title: Text(
-                          "${filteredFoods[index].food_name} ${snapshot.data ?? 'Veri bulunamadı'}",
+                          "${filteredFoods[index].food_name} (${snapshot.data  ?? 'Veri bulunamadı'} cal) .",
                         ),
                         onTap: () {
                           DialogHelper.showGramDialog(

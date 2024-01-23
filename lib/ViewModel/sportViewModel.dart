@@ -7,11 +7,12 @@ import 'package:http/http.dart' as http;
 class SportViewModel with ChangeNotifier {
   GoogleTranslator translator = GoogleTranslator();
   final nutritionApiKey = "fU9y72p/j2sGb2Tdw0j6/g==E0H80ltgZ4HNggFB";
+  List<String> filteredSports = [];
+  Map<String, String> translationCache = {};
 
-  List<String> sportsList = [
+  static List<String> sportsList = [
     "Archery",
     "Badminton",
-    "Football",
     "Softball",
     "Baseball",
     "Basketball",
@@ -55,6 +56,18 @@ class SportViewModel with ChangeNotifier {
     "Volleyball",
   ];
 
+  void filterSports(String query) async {
+    // Çevirileri paralel olarak al
+    List<String> translatedSports = await translateSportListToTurkishParallel();
+
+    // Çevrilen sporları kullanarak filtrele
+    filteredSports = translatedSports
+        .where((sport) => sport.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+
+    // Değişiklikleri dinleyen widget'lara haber ver
+    notifyListeners();
+  }
 
   Future<String> translateToTurkish(String text) async {
     try {
@@ -64,6 +77,42 @@ class SportViewModel with ChangeNotifier {
       print("Çeviri hatası: $e");
       return text;
     }
+  }
+
+  // Future<List<String>> translateSportListToTurkish() async {
+  //   List<String> turkishList = [];
+  //   for (String sport in sportsList) {
+  //     String turkishWord = await translateToTurkish(sport);
+  //     turkishList.add(turkishWord);
+  //   }
+  //   return turkishList;
+  // }
+
+  Future<List<String>> translateSportListToTurkishParallel() async {
+    // translateSportListToTurkish methodundan farklı olarak,
+    //translateToTurkish fonksiyonunu her spor için çağırarak tüm çevirileri paralel olarak gerçekleştirir.
+    // Future.wait metodu, tüm Future'ların tamamlanmasını bekleyen bir Future döndürür.
+    // Bu, çeviri işlemlerini paralel olarak yürütmenin etkili bir yoludur.
+    if (translationCache.isNotEmpty) {
+      // Eğer önbellekte veri varsa, önbellekten al
+      return translationCache.values.toList();
+    }
+    final List<String> turkishList = [];
+    final List<Future<String>> translationFutures = [];
+
+    for (String sport in sportsList) {
+      translationFutures.add(translateToTurkish(sport));
+    }
+
+    // Future.wait ile tüm çeviri işlemlerini paralel olarak bekliyoruz
+    List<String> translations = await Future.wait(translationFutures);
+
+    for (int i = 0; i < sportsList.length; i++) { //sıralı şekilde dönsün diye. future esnasında bozulabilir sıra.
+      turkishList.add(translations[i]);
+      translationCache[sportsList[i]] = translations[i];
+    }
+
+    return turkishList;
   }
 
   Future<String?> fetchActivitiesResponseBody(

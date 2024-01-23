@@ -8,7 +8,7 @@ class SportView extends StatefulWidget {
 }
 
 class _SportViewState extends State<SportView> {
-  List<String> sportTypes = ["Football", "Basketball", "Tennis", "Running"];
+  TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -16,44 +16,55 @@ class _SportViewState extends State<SportView> {
       create: (BuildContext context) {
         return SportViewModel();
       },
-      builder: (context,child)=> Scaffold(
+      builder: (context, child) => Scaffold(
         appBar: AppBar(
           title: Text("Sport View"),
         ),
         body: Column(
           children: [
-            // Add your text and button here
-            Text(
-              "Your Text Here",
-              style: TextStyle(fontSize: 18),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: _searchController,
+                onChanged: (value) {
+                  // Filtreleme işlemi burada gerçekleştirilir
+                  setState(() {
+                    context.read<SportViewModel>().filterSports(value);
+                  });
+
+                },
+                decoration: InputDecoration(
+                  labelText: 'Search Sports',
+                  border: OutlineInputBorder(),
+                ),
+              ),
             ),
             ElevatedButton(
-              onPressed: () async{
-                // context.read<SportViewModel>().digerSporlariEle();
-
-               // String turkce= await context
-               //      .read<SportViewModel>()
-               //      .translateToTurkish(sonuc);
-               //
-               // print("turkcesi: $turkce");
-
+              onPressed: () async {
               },
               child: Text("Your Button"),
             ),
-            // ListView.builder for sportTypes
             Expanded(
-              child: ListView.builder(
-                itemCount: sportTypes.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(sportTypes[index]),
-                    onTap: () {
-                      _showInputDialog(context, sportTypes[index]);
+              child: FutureBuilder<List<String>>(
+                future: context.read<SportViewModel>().translateSportListToTurkishParallel(),
+                builder: (context, snapshot) {
+                  List<String> sportsToShow = context.read<SportViewModel>().filteredSports;
+
+                  return ListView.builder(
+                    itemCount: sportsToShow.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(sportsToShow[index]),
+                        onTap: () {
+                          _showInputDialog(context, sportsToShow[index]);
+                        },
+                      );
                     },
                   );
                 },
               ),
             ),
+
           ],
         ),
       ),
@@ -77,7 +88,6 @@ class _SportViewState extends State<SportView> {
             TextButton(
               child: Text('Cancel'),
               onPressed: () {
-
                 Navigator.of(context).pop();
               },
             ),
