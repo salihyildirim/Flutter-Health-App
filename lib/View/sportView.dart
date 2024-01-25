@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:womenhealth/View/subSportView.dart';
 import 'package:womenhealth/ViewModel/sportViewModel.dart';
 
 class SportView extends StatefulWidget {
@@ -56,7 +57,9 @@ class _SportViewState extends State<SportView> {
                       return ListTile(
                         title: Text(sportsToShow[index]),
                         onTap: () {
-                          _showInputDialog(context, sportsToShow[index]);
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => SubSportView(subSports: ["tennis,handball"],)));
+                          // _showInputDialog(context, sportsToShow[index]);
                         },
                       );
                     },
