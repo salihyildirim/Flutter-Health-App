@@ -69,13 +69,22 @@ class SportViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<String> translateToTurkish(String text) async {
+  Future<String> translateToTurkish(String englishText) async {
     try {
-      Translation translation = await translator.translate(text, to: 'tr');
+      Translation translation = await translator.translate(englishText, to: 'tr');
       return translation.text;
     } catch (e) {
       print("Çeviri hatası: $e");
-      return text;
+      return englishText;
+    }
+  }
+  Future<String> translateToEnglish(String turkishText) async {
+    try {
+      Translation translation = await translator.translate(turkishText, to: 'en');
+      return translation.text;
+    } catch (e) {
+      print("Çeviri hatası: $e");
+      return turkishText;
     }
   }
 

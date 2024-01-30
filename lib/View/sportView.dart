@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:womenhealth/View/subSportView.dart';
+import 'package:womenhealth/Utils/widgets/subsports.dart';
 import 'package:womenhealth/ViewModel/sportViewModel.dart';
 
 class SportView extends StatefulWidget {
@@ -56,10 +56,15 @@ class _SportViewState extends State<SportView> {
                     itemBuilder: (context, index) {
                       return ListTile(
                         title: Text(sportsToShow[index]),
-                        onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => SubSportView(subSports: ["tennis,handball"],)));
-                          // _showInputDialog(context, sportsToShow[index]);
+                        onTap: ()async {
+                          String selectedSport= await context.read<SportViewModel>().translateToEnglish(sportsToShow[index]);
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              // Özel bir widget oluştur ve içerisinde istediğiniz içeriği göster
+                              return SubSports(selectedSport);
+                            },
+                          );
                         },
                       );
                     },
