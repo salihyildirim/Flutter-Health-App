@@ -123,6 +123,28 @@ class SportViewModel with ChangeNotifier {
 
     return turkishList;
   }
+  Future<String?> fetchNonParametersActivitiesResponseBody(
+      String sportName) async {
+    String query = sportName.toString();
+    String encodedQuery = Uri.encodeQueryComponent(query);
+
+    var url = Uri.parse(
+        "https://api.api-ninjas.com/v1/caloriesburned?activity=$encodedQuery");
+    var response = await http.get(
+      url,
+      headers: {
+        'X-Api-Key': nutritionApiKey,
+      },
+    );
+
+    if (response.statusCode == 200) {
+    return response.body;
+    }
+    else {
+      return null;
+    }
+
+  }
 
   Future<String?> fetchActivitiesResponseBody(
       String sportName, double weight, double durationMinutes) async {
@@ -141,15 +163,17 @@ class SportViewModel with ChangeNotifier {
 
     if (response.statusCode == 200) {
       return response.body;
-    } else {
+    }
+    else {
       return null;
     }
+
   }
 
   Future<List<String>?> getNameFromActivities(
-      String sportName, double weight, double durationMinutes) async {
+      String sportName) async {
     var activitiesBody =
-        await fetchActivitiesResponseBody(sportName, weight, durationMinutes);
+        await fetchNonParametersActivitiesResponseBody(sportName);
     List<String> listOfActivityName = [];
 
     if (activitiesBody != null) {
