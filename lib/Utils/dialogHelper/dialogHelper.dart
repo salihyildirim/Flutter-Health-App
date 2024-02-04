@@ -49,4 +49,47 @@ class DialogHelper {
       },
     );
   }
+  static void showSportMinutesDialog(BuildContext context) async {
+    TextEditingController minuteController = TextEditingController();
+
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Spor Dakikası'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: minuteController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(labelText: 'Dakika'),
+              ),
+              SizedBox(height: 16.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context); // Vazgeç butonu
+                    },
+                    child: Text('Vazgeç'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      // OK butonu işlemleri burada yapılabilir.
+                      String enteredMinutes = minuteController.text;
+                      // TODO: enteredMinutes değerini kullanarak işlemleri gerçekleştirin.
+                      Navigator.pop(context); // Dialog'ı kapat
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }
