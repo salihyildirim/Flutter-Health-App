@@ -4,7 +4,7 @@ import 'package:womenhealth/Utils/dialogHelper/dialogHelper.dart';
 import 'package:womenhealth/ViewModel/sportViewModel.dart';
 
 class SubSports extends StatefulWidget {
-  String selectedSport;
+  final String selectedSport;
   SubSports(this.selectedSport);
 
   @override
@@ -41,7 +41,7 @@ class _SubSportsState extends State<SubSports> {
                           itemCount: snapshot.data!.length,
                           itemBuilder: (context, index) {
                             return ListTile(
-                              title: Text(snapshot.data![index]),
+                              title: Text(snapshot.data![index]),//turkceye cevir.
                               onTap: () {
                                 DialogHelper.showSportMinutesDialog(context);
                               },
@@ -54,8 +54,7 @@ class _SubSportsState extends State<SubSports> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    // Eğer gerekirse, seçili spor alt listesini kullanarak başka bir işlem yapabilirsiniz.
-                    // Örnek: print(selectedSportSubList!.length);
+
                   },
                   child: Text("ffff"),
                 ),
