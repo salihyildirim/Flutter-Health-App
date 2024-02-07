@@ -41,7 +41,7 @@ class _SubSportsState extends State<SubSports> {
                           itemCount: snapshot.data!.length,
                           itemBuilder: (context, index) {
                             return ListTile(
-                              title: Text(snapshot.data![index]),//turkceye cevir.
+                              title: Text(snapshot.data![index]),//turkceye cevirelim.
                               onTap: () {
                                 DialogHelper.showSportMinutesDialog(context);
                               },
