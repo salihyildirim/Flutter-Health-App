@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:womenhealth/Model/user.dart';
 import 'package:womenhealth/Utils/dialogHelper/dialogHelper.dart';
 import 'package:womenhealth/ViewModel/sportViewModel.dart';
 
 class SubSports extends StatefulWidget {
   final String selectedSport;
-  SubSports(this.selectedSport);
+  List<Future<String>> translatedFutures = [];
+  User user;
+
+  SubSports(this.selectedSport,this.user);
 
   @override
   State<SubSports> createState() => _SubSportsState();
 }
+
 
 class _SubSportsState extends State<SubSports> {
   @override
@@ -27,7 +32,7 @@ class _SubSportsState extends State<SubSports> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 FutureBuilder<List<String>?>(
-                  future: context.read<SportViewModel>().getNameFromActivities(widget.selectedSport),
+                  future: context.read<SportViewModel>().getTurkishNameFromActivities(widget.selectedSport),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return CircularProgressIndicator();
@@ -41,9 +46,13 @@ class _SubSportsState extends State<SubSports> {
                           itemCount: snapshot.data!.length,
                           itemBuilder: (context, index) {
                             return ListTile(
-                              title: Text(snapshot.data![index]),//turkceye cevirelim.
-                              onTap: () {
-                                DialogHelper.showSportMinutesDialog(context);
+                              title: Text(snapshot.data![index]),
+                              onTap: () async {
+                                List<String>? englishSubSports = await context.read<SportViewModel>().getNameFromActivities(widget.selectedSport);
+                                print("HADI BAKALIM ${englishSubSports?[index]}"); //  //name değeri
+                                String? durationMinutes = await DialogHelper.showSportMinutesDialog(context);
+                                double mydeger = await context.read<SportViewModel>().getCalorieFromAnActivity(widget.selectedSport, englishSubSports![index], widget.user.kg.toDouble(), durationMinutes);
+                                print(" SONUC OLARAK SPORUN KALORISI : $mydeger");
                               },
                             );
                           },

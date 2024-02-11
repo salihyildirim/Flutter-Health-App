@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:womenhealth/Model/user.dart';
 import 'package:womenhealth/Utils/widgets/subsports.dart';
 import 'package:womenhealth/ViewModel/sportViewModel.dart';
 
 class SportView extends StatefulWidget {
+  User user;
+  SportView(this.user);
+
   @override
   _SportViewState createState() => _SportViewState();
 }
@@ -62,7 +66,7 @@ class _SportViewState extends State<SportView> {
                             context: context,
                             builder: (BuildContext context) {
                               // Özel bir widget oluştur ve içerisinde istediğiniz içeriği göster
-                              return SubSports(selectedSport);
+                              return SubSports(selectedSport,widget.user);
                             },
                           );
                         },

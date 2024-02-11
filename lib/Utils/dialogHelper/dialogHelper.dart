@@ -49,7 +49,7 @@ class DialogHelper {
       },
     );
   }
-  static void showSportMinutesDialog(BuildContext context) async {
+  static Future<String?> showSportMinutesDialog(BuildContext context) async {
     TextEditingController minuteController = TextEditingController();
 
     return showDialog(
@@ -79,8 +79,7 @@ class DialogHelper {
                     onPressed: () {
                       // OK butonu işlemleri burada yapılabilir.
                       String enteredMinutes = minuteController.text;
-                      // TODO: enteredMinutes değerini kullanarak işlemleri gerçekleştirin.
-                      Navigator.pop(context); // Dialog'ı kapat
+                      Navigator.pop(context, enteredMinutes); // Girilen dakika değerini döndür
                     },
                     child: Text('OK'),
                   ),
@@ -92,4 +91,5 @@ class DialogHelper {
       },
     );
   }
+
 }

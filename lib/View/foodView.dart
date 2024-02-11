@@ -100,7 +100,7 @@ class _FoodViewState extends State<FoodView> {
             MaterialButton(
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SportView()));
+                    MaterialPageRoute(builder: (context) => SportView(widget.user)));
               },
               child: Text("ILERI"),
             ),

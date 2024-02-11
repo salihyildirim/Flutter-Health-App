@@ -71,16 +71,19 @@ class SportViewModel with ChangeNotifier {
 
   Future<String> translateToTurkish(String englishText) async {
     try {
-      Translation translation = await translator.translate(englishText, to: 'tr');
+      Translation translation =
+          await translator.translate(englishText, to: 'tr');
       return translation.text;
     } catch (e) {
       print("Çeviri hatası: $e");
       return englishText;
     }
   }
+
   Future<String> translateToEnglish(String turkishText) async {
     try {
-      Translation translation = await translator.translate(turkishText, to: 'en');
+      Translation translation =
+          await translator.translate(turkishText, to: 'en');
       return translation.text;
     } catch (e) {
       print("Çeviri hatası: $e");
@@ -116,13 +119,15 @@ class SportViewModel with ChangeNotifier {
     // Future.wait ile tüm çeviri işlemlerini paralel olarak bekliyoruz
     List<String> translations = await Future.wait(translationFutures);
 
-    for (int i = 0; i < sportsList.length; i++) { //sıralı şekilde dönsün diye. future esnasında bozulabilir sıra.
+    for (int i = 0; i < sportsList.length; i++) {
+      //sıralı şekilde dönsün diye. future esnasında bozulabilir sıra.
       turkishList.add(translations[i]);
       translationCache[sportsList[i]] = translations[i];
     }
 
     return turkishList;
   }
+
   Future<String?> fetchNonParametersActivitiesResponseBody(
       String sportName) async {
     String query = sportName.toString();
@@ -138,12 +143,10 @@ class SportViewModel with ChangeNotifier {
     );
 
     if (response.statusCode == 200) {
-    return response.body;
-    }
-    else {
+      return response.body;
+    } else {
       return null;
     }
-
   }
 
   Future<String?> fetchActivitiesResponseBody(
@@ -151,8 +154,9 @@ class SportViewModel with ChangeNotifier {
     String query = sportName.toString();
     String encodedQuery = Uri.encodeQueryComponent(query);
 
+    double weightToPounds = weight * 2.20462;
     var url = Uri.parse(
-        "https://api.api-ninjas.com/v1/caloriesburned?activity=$encodedQuery&weight=$weight&duration=$durationMinutes");
+        "https://api.api-ninjas.com/v1/caloriesburned?activity=$encodedQuery&weight=$weightToPounds&duration=$durationMinutes");
 // [{"name": "Handball", "calories_per_hour": 544, "duration_minutes": 60, "total_calories": 544}, {"name": "Handball, team", "calories_per_hour": 362, "duration_minutes": 60, "total_calories": 362}]
     var response = await http.get(
       url,
@@ -163,16 +167,32 @@ class SportViewModel with ChangeNotifier {
 
     if (response.statusCode == 200) {
       return response.body;
-    }
-    else {
+    } else {
       return null;
     }
-
   }
 
-  Future<List<String>?> getNameFromActivities(
-      String sportName) async {
-    var activitiesBody =
+  Future<List<String>?> getTurkishNameFromActivities(String sportName) async {
+    String? activitiesBody =
+        await fetchNonParametersActivitiesResponseBody(sportName);
+    List<String> listOfActivityName = [];
+
+    if (activitiesBody != null) {
+      var jsonResponse = json.decode(activitiesBody);
+      if (jsonResponse is List && jsonResponse.isNotEmpty) {
+        for (var item in jsonResponse) {
+          String toBeAdded = await translateToTurkish(item['name']);
+          listOfActivityName.add(toBeAdded);
+        }
+        print("listOfActivityName = $listOfActivityName");
+        return listOfActivityName;
+      }
+    }
+    return null;
+  }
+
+  Future<List<String>?> getNameFromActivities(String sportName) async {
+    String? activitiesBody =
         await fetchNonParametersActivitiesResponseBody(sportName);
     List<String> listOfActivityName = [];
 
@@ -189,14 +209,23 @@ class SportViewModel with ChangeNotifier {
     return null;
   }
 
-  // void digerSporlariEle() async {
-  //   for (var item in sportsList) {
-  //     String? sonuc = await fetchActivitiesResponseBody(item, 100, 60);
-  //     if (sonuc != null) {
-  //       printNameFromJson(sonuc);
-  //     }
-  //   }
-  // }
+  Future<double> getCalorieFromAnActivity(String sportName, String subSportName,
+      double weight, String? durationMinutes) async {
+    double durationMinutes2 = double.parse(durationMinutes ?? "0");
+
+    String? activitiesBody =
+        await fetchActivitiesResponseBody(sportName, weight, durationMinutes2);
+    if (activitiesBody != null) {
+      var jsonResponse = json.decode(activitiesBody);
+      if (jsonResponse is List && jsonResponse.isNotEmpty) {
+        for(var item in jsonResponse){
+          if(item['name']==subSportName){
+            return (item['total_calories']).toDouble();
+          }
+        }
+      }
+    }return 0;
+  }
 
   void printNameFromJson(String jsonStr) {
     List<dynamic> activities = json.decode(jsonStr);
