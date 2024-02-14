@@ -82,38 +82,4 @@ class _SportViewState extends State<SportView> {
       ),
     );
   }
-
-  Future<void> _showInputDialog(BuildContext context, String sportType) async {
-    TextEditingController _minutesController = TextEditingController();
-
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Enter Minutes for $sportType"),
-          content: TextFormField(
-            controller: _minutesController,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(labelText: "Minutes"),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                String minutes = _minutesController.text;
-                print("Selected $sportType for $minutes minutes");
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 }

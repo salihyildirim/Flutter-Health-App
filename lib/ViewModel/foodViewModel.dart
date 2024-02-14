@@ -1461,7 +1461,7 @@ class FoodViewModel with ChangeNotifier {
     }
   }
 
-  void addCaloriesTaken(User user, String foodName, int gram) async {
+  Future<UserDiet> addFirebaseUserDietCaloriesTaken(User user, String foodName, int gram) async {
     UserDiet? gettingUserDiet = await fetchUserDiet(user.eMail);
     user.userDiet = gettingUserDiet;
 
@@ -1484,8 +1484,8 @@ class FoodViewModel with ChangeNotifier {
         //user.userDiet 'i database'e kaydet.
         updateUserDiet(user.eMail, user.userDiet!.toMap());
       }
-      print(user.userDiet?.calories_taken.toString());
     }
+    return user.userDiet!;
   }
 
   Future<List<String>> getAllTurkishFoods() async {

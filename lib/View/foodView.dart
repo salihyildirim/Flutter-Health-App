@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:translator_plus/translator_plus.dart';
+import 'package:womenhealth/Model/User_Diet.dart';
 import 'package:womenhealth/Model/food.dart';
 import 'package:womenhealth/Model/user.dart';
 import 'package:womenhealth/Utils/dialogHelper/dialogHelper.dart';
@@ -83,12 +84,13 @@ class _FoodViewState extends State<FoodView> {
                         title: Text(
                           "${filteredFoods[index].food_name} (${snapshot.data  ?? 'Veri bulunamadı'} cal) .",
                         ),
-                        onTap: () {
-                          DialogHelper.showGramDialog(
+                        onTap: () async{
+                          UserDiet? userDiet = await DialogHelper.showGramDialog(
                               context,
                               filteredFoods[index],
                               widget.foodViewModel,
                               widget.user);
+                          widget.user.userDiet=userDiet;
                         },
                       );
                     },

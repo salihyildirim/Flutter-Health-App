@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:womenhealth/Model/User_Diet.dart';
 import 'package:womenhealth/Model/food.dart';
 import 'package:womenhealth/Model/user.dart';
 import 'package:womenhealth/ViewModel/foodViewModel.dart';
 
 class DialogHelper {
 
-  static void showGramDialog(BuildContext context, Food food, FoodViewModel foodViewModel,User user) {
+  static Future<UserDiet?> showGramDialog(BuildContext context, Food food, FoodViewModel foodViewModel, User user) async {
     int grams = 0;
-    showDialog(
+    UserDiet? userDiet;
+
+    userDiet = await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -19,7 +22,6 @@ class DialogHelper {
                 keyboardType: TextInputType.number,
                 onChanged: (value) {
                   grams = int.tryParse(value) ?? 0;
-
                 },
                 decoration: InputDecoration(
                   hintText: 'Gram',
@@ -30,14 +32,14 @@ class DialogHelper {
                 children: [
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      Navigator.of(context).pop(null);
                     },
                     child: Text('Vazgeç'),
                   ),
                   ElevatedButton(
-                    onPressed: () async{
-                        foodViewModel.addCaloriesTaken(user, food.food_name,grams);
-                      Navigator.of(context).pop();
+                    onPressed: () async {
+                      userDiet = await foodViewModel.addFirebaseUserDietCaloriesTaken(user, food.food_name, grams);
+                      Navigator.pop(context, userDiet);
                     },
                     child: Text('Ekle'),
                   ),
@@ -48,7 +50,10 @@ class DialogHelper {
         );
       },
     );
+
+    return userDiet;
   }
+
   static Future<String?> showSportMinutesDialog(BuildContext context) async {
     TextEditingController minuteController = TextEditingController();
 
