@@ -49,7 +49,6 @@ class _SubSportsState extends State<SubSports> {
                               title: Text(snapshot.data![index]),
                               onTap: () async {
                                 List<String>? englishSubSports = await context.read<SportViewModel>().getNameFromActivities(widget.selectedSport);
-                                print("HADI BAKALIM ${englishSubSports?[index]}"); //  //name değeri
                                 String? durationMinutes = await DialogHelper.showSportMinutesDialog(context);
                                 double mydeger = await context.read<SportViewModel>().getCalorieFromAnActivity(widget.selectedSport, englishSubSports![index], widget.user.kg.toDouble(), durationMinutes);
                                 print(" SONUC OLARAK SPORUN KALORISI : $mydeger");
