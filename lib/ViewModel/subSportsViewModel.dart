@@ -1,4 +1,5 @@
 import 'package:womenhealth/Model/User_Diet.dart';
+import 'package:womenhealth/Model/user.dart';
 import 'package:womenhealth/Service/FirestoreService.dart';
 
 class SubSportsViewModel {
@@ -18,7 +19,6 @@ class SubSportsViewModel {
       return userDiet;
     } else {
       return null;
-      print("userDiet çekilemedi.");
     }
   }
 
@@ -30,6 +30,10 @@ class SubSportsViewModel {
   Future<void> updateUserDiet(
       String documentId, Map<String, dynamic> newData) async {
     await _firestoreService.updateData(documentId, newData);
+  }
+
+  Future<void> addFirebaseUserDietCaloriesGiven (User user,)async {
+ //doldur
   }
 
 }

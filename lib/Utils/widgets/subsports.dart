@@ -9,12 +9,11 @@ class SubSports extends StatefulWidget {
   List<Future<String>> translatedFutures = [];
   User user;
 
-  SubSports(this.selectedSport,this.user);
+  SubSports(this.selectedSport, this.user);
 
   @override
   State<SubSports> createState() => _SubSportsState();
 }
-
 
 class _SubSportsState extends State<SubSports> {
   @override
@@ -32,13 +31,16 @@ class _SubSportsState extends State<SubSports> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 FutureBuilder<List<String>?>(
-                  future: context.read<SportViewModel>().getTurkishNameFromActivities(widget.selectedSport),
+                  future: context
+                      .read<SportViewModel>()
+                      .getTurkishNameFromActivities(widget.selectedSport),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return CircularProgressIndicator();
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
-                    } else if (snapshot.data == null || snapshot.data!.isEmpty) {
+                    } else if (snapshot.data == null ||
+                        snapshot.data!.isEmpty) {
                       return Text('No data available.');
                     } else {
                       return Expanded(
@@ -48,10 +50,22 @@ class _SubSportsState extends State<SubSports> {
                             return ListTile(
                               title: Text(snapshot.data![index]),
                               onTap: () async {
-                                List<String>? englishSubSports = await context.read<SportViewModel>().getNameFromActivities(widget.selectedSport);
-                                String? durationMinutes = await DialogHelper.showSportMinutesDialog(context);
-                                double mydeger = await context.read<SportViewModel>().getCalorieFromAnActivity(widget.selectedSport, englishSubSports![index], widget.user.kg.toDouble(), durationMinutes);
-                                print(" SONUC OLARAK SPORUN KALORISI : $mydeger");
+                                List<String>? englishSubSports = await context
+                                    .read<SportViewModel>()
+                                    .getNameFromActivities(
+                                        widget.selectedSport);
+                                String? durationMinutes =
+                                    await DialogHelper.showSportMinutesDialog(
+                                        context);
+                                double mydeger = await context
+                                    .read<SportViewModel>()
+                                    .getCalorieFromAnActivity(
+                                        widget.selectedSport,
+                                        englishSubSports![index],
+                                        widget.user.kg.toDouble(),
+                                        durationMinutes);
+                                print(
+                                    " SONUC OLARAK SPORUN KALORISI : $mydeger");
                               },
                             );
                           },
@@ -61,9 +75,7 @@ class _SubSportsState extends State<SubSports> {
                   },
                 ),
                 ElevatedButton(
-                  onPressed: () async {
-
-                  },
+                  onPressed: () async {},
                   child: Text("ffff"),
                 ),
               ],
@@ -73,6 +85,4 @@ class _SubSportsState extends State<SubSports> {
       ),
     );
   }
-
-
 }
