@@ -32,8 +32,29 @@ class SubSportsViewModel {
     await _firestoreService.updateData(documentId, newData);
   }
 
-  Future<void> addFirebaseUserDietCaloriesGiven (User user,)async {
- //doldur
+  Future<void> addFirebaseUserDietCaloriesGiven (User user,double givenCalories)async {
+
+    UserDiet? gettingUserDiet = await fetchUserDiet(user.eMail);
+    user.userDiet = gettingUserDiet;
+
+    if(givenCalories>0){
+      if (user.userDiet == null) {
+        UserDiet userDiet = UserDiet(
+          calories_given: givenCalories,
+          calculation_date: DateTime.now(),
+        );
+        user.userDiet = userDiet;
+        createDataWithCustomId(user.userDiet!.toMap(), user.eMail);
+        //tam burada yeni oluşturduğumuz userdiet'i kaydet.
+      } else {
+        user.userDiet!.calories_taken =
+            (user.userDiet!.calories_taken ?? 0) + givenCalories;
+
+        //user.userDiet 'i database'e kaydet.
+        updateUserDiet(user.eMail, user.userDiet!.toMap());
+      }
+    }
+
   }
 
 }
