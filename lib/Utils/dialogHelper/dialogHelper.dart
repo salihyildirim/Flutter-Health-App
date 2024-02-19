@@ -85,6 +85,7 @@ class DialogHelper {
                       // OK butonu işlemleri burada yapılabilir.
                       String enteredMinutes = minuteController.text;
                       Navigator.pop(context, enteredMinutes); // Girilen dakika değerini döndür
+                      // byrada addFirebaseUserDietCaloriesGiven fonks. çagır
                     },
                     child: Text('OK'),
                   ),

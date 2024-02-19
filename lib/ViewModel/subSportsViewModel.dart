@@ -47,8 +47,8 @@ class SubSportsViewModel {
         createDataWithCustomId(user.userDiet!.toMap(), user.eMail);
         //tam burada yeni oluşturduğumuz userdiet'i kaydet.
       } else {
-        user.userDiet!.calories_taken =
-            (user.userDiet!.calories_taken ?? 0) + givenCalories;
+        user.userDiet!.calories_given =
+            (user.userDiet!.calories_given ?? 0) + givenCalories;
 
         //user.userDiet 'i database'e kaydet.
         updateUserDiet(user.eMail, user.userDiet!.toMap());
