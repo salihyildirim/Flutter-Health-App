@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
       locale: context.locale,
       supportedLocales: context.supportedLocales,
       title: 'Flutter Demo',
-      theme: ThemeData(),
+      theme: ThemeData(elevatedButtonTheme:ElevatedButtonThemeData(style: ElevatedButton.styleFrom(backgroundColor: Colors.green,)) ),
       home: MyHomePage(),
     );
   }

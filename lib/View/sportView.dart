@@ -27,34 +27,30 @@ class _SportViewState extends State<SportView> {
         ),
         body: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: _searchController,
-                onChanged: (value) {
-                  // Filtreleme işlemi burada gerçekleştirilir
-                  setState(() {
-                    context.read<SportViewModel>().filterSports(value);
-                  });
+            Expanded(flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  controller: _searchController,
+                  onChanged: (value) {
+                    // Filtreleme işlemi burada gerçekleştirilir
+                    setState(() {
+                      context.read<SportViewModel>().filterSports(value);
+                    });
 
-                },
-                decoration: InputDecoration(
-                  labelText: 'Search Sports',
-                  border: OutlineInputBorder(),
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Search Sports',
+                    border: OutlineInputBorder(),
+                  ),
                 ),
               ),
             ),
-            ElevatedButton(
-              onPressed: () async {
-              },
-              child: Text("Your Button"),
-            ),
-            Expanded(
+            Expanded(flex: 9,
               child: FutureBuilder<List<String>>(
                 future: context.read<SportViewModel>().translateSportListToTurkishParallel(),
                 builder: (context, snapshot) {
                   List<String> sportsToShow = context.read<SportViewModel>().filteredSports;
-
                   return ListView.builder(
                     itemCount: sportsToShow.length,
                     itemBuilder: (context, index) {
@@ -76,6 +72,7 @@ class _SportViewState extends State<SportView> {
                 },
               ),
             ),
+            Expanded(child: ElevatedButton(onPressed: (){}, child: Text("ILERI"),)) 
 
           ],
         ),

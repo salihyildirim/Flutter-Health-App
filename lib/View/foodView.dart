@@ -23,7 +23,6 @@ class _FoodViewState extends State<FoodView> {
   late List<Food> foods = [];
   late List<Food> filteredFoods = [];
   GoogleTranslator translator = GoogleTranslator();
-  String textt= "Hello World";
 
   @override
   void initState() {
@@ -70,7 +69,7 @@ class _FoodViewState extends State<FoodView> {
         create: (BuildContext context) => FoodViewModel(),
         child: Column(
           children: [
-            Expanded(
+            Expanded(flex: 11,
               child: ListView.builder(
                 itemCount: filteredFoods.length,
                 itemBuilder: (context, index) {
@@ -82,15 +81,16 @@ class _FoodViewState extends State<FoodView> {
                         AsyncSnapshot<double?> snapshot) {
                       return ListTile(
                         title: Text(
-                          "${filteredFoods[index].food_name} (${snapshot.data  ?? 'Veri bulunamadı'} cal) .",
+                          "${filteredFoods[index].food_name} (${snapshot.data ?? 'Veri bulunamadı'} cal) .",
                         ),
-                        onTap: () async{
-                          UserDiet? userDiet = await DialogHelper.showGramDialog(
-                              context,
-                              filteredFoods[index],
-                              widget.foodViewModel,
-                              widget.user);
-                          widget.user.userDiet=userDiet;
+                        onTap: () async {
+                          UserDiet? userDiet =
+                              await DialogHelper.showGramDialog(
+                                  context,
+                                  filteredFoods[index],
+                                  widget.foodViewModel,
+                                  widget.user);
+                          widget.user.userDiet = userDiet;
                         },
                       );
                     },
@@ -98,18 +98,22 @@ class _FoodViewState extends State<FoodView> {
                 },
               ),
             ),
-            Text(textt),
-            MaterialButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SportView(widget.user)));
-              },
-              child: Text("ILERI"),
+            Expanded(flex: 1,
+              child: ButtonTheme(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SportView(widget.user)));
+                  },
+                  child: Text("ILERI"),
+                ),
+              ),
             ),
           ],
         ),
       ),
     );
   }
-
 }

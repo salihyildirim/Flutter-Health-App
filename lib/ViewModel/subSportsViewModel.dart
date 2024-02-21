@@ -1,8 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:womenhealth/Model/User_Diet.dart';
 import 'package:womenhealth/Model/user.dart';
 import 'package:womenhealth/Service/FirestoreService.dart';
 
-class SubSportsViewModel {
+class SubSportsViewModel with ChangeNotifier{
 //burada userdiet nesnesini alıp, database'e given_calories kısmına ekle(addFirebaseUserDietCaloriesGiven). bunun için user_email lazım.
 //direkt user nesnesini alırsan önceki işlemlerde user.userdiet dogru atandı. onu kullanabilirsin.
 //aynı zamanda email'i de userden alırsın.
