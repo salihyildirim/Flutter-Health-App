@@ -3,7 +3,7 @@ import 'package:womenhealth/Model/User_Diet.dart';
 import 'package:womenhealth/Model/user.dart';
 import 'package:womenhealth/Service/FirestoreService.dart';
 
-class SubSportsViewModel with ChangeNotifier{
+class SubSportsViewModel with ChangeNotifier {
 //burada userdiet nesnesini alıp, database'e given_calories kısmına ekle(addFirebaseUserDietCaloriesGiven). bunun için user_email lazım.
 //direkt user nesnesini alırsan önceki işlemlerde user.userdiet dogru atandı. onu kullanabilirsin.
 //aynı zamanda email'i de userden alırsın.
@@ -33,12 +33,12 @@ class SubSportsViewModel with ChangeNotifier{
     await _firestoreService.updateData(documentId, newData);
   }
 
-  Future<void> addFirebaseUserDietCaloriesGiven (User user,double givenCalories)async {
-
+  Future<void> addFirebaseUserDietCaloriesGiven(
+      User user, double givenCalories) async {
     UserDiet? gettingUserDiet = await fetchUserDiet(user.eMail);
     user.userDiet = gettingUserDiet;
 
-    if(givenCalories>0){
+    if (givenCalories > 0) {
       if (user.userDiet == null) {
         UserDiet userDiet = UserDiet(
           calories_given: givenCalories,
@@ -55,7 +55,5 @@ class SubSportsViewModel with ChangeNotifier{
         updateUserDiet(user.eMail, user.userDiet!.toMap());
       }
     }
-
   }
-
 }

@@ -73,8 +73,7 @@ class _SubSportsState extends State<SubSports> {
                                                 englishSubSports![index],
                                                 widget.user.kg.toDouble(),
                                                 durationMinutes);
-                                        print(
-                                            " SONUC OLARAK SPORUN KALORISI : $givenCalories");
+
                                         context.read<SubSportsViewModel>().addFirebaseUserDietCaloriesGiven(widget.user, givenCalories);
                                       },
                                     );

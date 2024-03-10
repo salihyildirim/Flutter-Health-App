@@ -10,7 +10,7 @@ import 'package:womenhealth/View/loginView.dart';
 import 'package:womenhealth/View/welcomeView.dart';
 import 'package:womenhealth/ViewModel/loginViewModel.dart';
 import 'package:womenhealth/constants.dart';
-
+//getx. import
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
