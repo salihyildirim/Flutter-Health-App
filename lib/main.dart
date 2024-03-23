@@ -65,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     Auth.loginStatus(); // uygulama ilk baslarken login kontrolü yapılır.
     setState(() {});
-  }//getx ekle
+  }//getx ekle giris sayfası gunluk degerleri yansıtsın
 
   @override
   Widget build(BuildContext context) {
