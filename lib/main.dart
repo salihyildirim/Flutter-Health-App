@@ -66,6 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Auth.loginStatus(); // uygulama ilk baslarken login kontrolü yapılır.
     setState(() {});
   }//getx ekle giris sayfası gunluk degerleri yansıtsın
+  //ilk seferde kullanici girişi yanlis yapildiysa, 2. seferde denerken dogru girse de giris olmuyor.
 
   @override
   Widget build(BuildContext context) {
