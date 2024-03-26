@@ -1,6 +1,8 @@
+import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
 import 'package:womenhealth/Model/user.dart';
 import 'package:womenhealth/Service/Auth.dart';
@@ -19,6 +21,7 @@ class WelcomeView extends StatefulWidget {
 class _WelcomeViewState extends State<WelcomeView> {
   User? getUser;
   firebase_auth.User? currentUser;
+  int _currentTab = 0;
 
 
   Future<void> fetchCurrentUser(BuildContext context) async {
@@ -37,6 +40,21 @@ class _WelcomeViewState extends State<WelcomeView> {
       },
       builder: (context, _) =>
           Scaffold(
+            bottomNavigationBar: AnimatedBottomNavigationBar( height: Get.height / 12,
+              //ekranın %12'si. mediaquery yerine get bize yardımcı oluyor.
+              activeColor: Colors.white,
+              inactiveColor: Colors.grey,
+              gapLocation: GapLocation.center,
+              backgroundColor: Colors.black,
+              icons: [Icons.show_chart, Icons.history],
+              iconSize: 30,
+              activeIndex: _currentTab,
+              onTap: (int) {
+                setState(() {
+                  _currentTab = int;
+                  //_currentScreen = (int == 0) ? GraphScreen() : HistoryScreen();
+                });
+              },),
             appBar: AppBar(
               centerTitle: true,
               title: FutureBuilder<String?>(
