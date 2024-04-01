@@ -5,7 +5,7 @@ import 'package:womenhealth/Model/user.dart';
 import 'package:womenhealth/Service/Auth.dart';
 import 'package:womenhealth/Service/FirestoreService.dart';
 
-class WelcomeViewModel with ChangeNotifier{
+class UserInfoViewModel with ChangeNotifier{
   final FirestoreService _firestoreService = FirestoreService('users');
   final Auth _auth=Auth();
 

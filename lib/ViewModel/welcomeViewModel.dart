@@ -1,11 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:womenhealth/Model/user.dart';
 import 'package:womenhealth/Service/Auth.dart';
 import 'package:womenhealth/Service/FirestoreService.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
-class WelcomeViewModel with ChangeNotifier {
+class WelcomeViewModel extends GetxController {
   final FirestoreService _firestoreService = FirestoreService('users');
   final Auth _auth = Auth();
 

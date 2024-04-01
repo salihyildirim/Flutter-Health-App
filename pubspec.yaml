@@ -50,6 +50,8 @@ dependencies:
   font_awesome_flutter: ^10.7.0
   animated_bottom_navigation_bar: ^1.3.3
   intl: ^0.18.1
+  sqflite: ^2.3.2
+  path:
 
 dev_dependencies:
   flutter_test:
