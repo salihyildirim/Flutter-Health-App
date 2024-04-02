@@ -8,7 +8,6 @@ import 'package:womenhealth/Service/Auth.dart';
 import 'package:womenhealth/View/daily_calculations.dart';
 import 'package:womenhealth/View/foodView.dart';
 import 'package:womenhealth/View/previous_calculations.dart';
-import 'package:womenhealth/View/userInfoView.dart';
 import 'package:womenhealth/ViewModel/foodViewModel.dart';
 import 'package:womenhealth/ViewModel/welcomeViewModel.dart';
 

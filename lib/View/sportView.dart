@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:provider/provider.dart';
 import 'package:womenhealth/Model/user.dart';
 import 'package:womenhealth/Utils/widgets/subsports.dart';
-import 'package:womenhealth/View/daily_results_view.dart';
+import 'package:womenhealth/View/daily_calculations.dart';
 import 'package:womenhealth/ViewModel/sportViewModel.dart';
 
 class SportView extends StatefulWidget {
@@ -83,10 +85,7 @@ class _SportViewState extends State<SportView> {
             Expanded(
                 child: ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => DailyResultsView()));
+                Get.to(DailyCalculationsView());
               },//buraya gecerken database'e kaydetmiş olduğun userDiet nesnesini ilet.
               child: Text("ILERI"),
             ))

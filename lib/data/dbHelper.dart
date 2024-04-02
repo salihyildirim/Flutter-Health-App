@@ -1,18 +1,14 @@
 import 'dart:async';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:womenhealth/Model/User_Diet.dart';
+import 'package:womenhealth/Model/user_diet.dart';
 
 class DbHelper {
-  late Database _db;
+ Database? _db;
 
   Future<Database> get db async {
-    if (_db == null) {
-      _db = await initializeDb();
-    }
-    return _db;
+    _db ??= await initializeDb();
+    return _db!;
   }
 
   Future<Database> initializeDb() async {
@@ -27,29 +23,34 @@ class DbHelper {
         "Create table calculateddiets(id integer primary key, calculation_date datetime, calories_taken float, calories_given float)");
   }
 
-  Future<List> getCalculatedDiets() async {
+  Future<List<UserDiet>> getCalculatedDiets() async {
     Database db = await this.db;
-    var result = await db.query("calculateddiets");
-    return result;
-  }
+    var result = await db.query("calculateddiets", columns: ['*']);
 
-  Future<int> insert(UserDiet userDiet) async {
-    Database db = await this.db;
-    var result = await db.insert("calculateddiets", userDiet.toMap());
-    return result;
-  }
-
-  Future<int> delete(int id) async {
-    Database db = await this.db;
-    var result = await db.rawDelete("delete from calculateddiets where id = $id");
-    return result;
-  }
-
-  Future<int> update(UserDiet userDiet) async {
-    Database db = await this.db;
-    var result = await db.update("calculateddiets", userDiet.toMap(), where: "id=?",whereArgs: [userDiet.id]);
-    return result;
+    return List.generate(result.length, (index) {
+      return UserDiet.fromObject(result[index]);
+    }
+    );
   }
 
 
+Future<int> insert(UserDiet userDiet) async {
+  Database db = await this.db;
+  var result = await db.insert("calculateddiets", userDiet.toMap());
+  return result;
+}
+
+Future<int> delete(int id) async {
+  Database db = await this.db;
+  var result = await db.rawDelete("delete from calculateddiets where id = $id");
+  return result;
+}
+
+Future<int> update(UserDiet userDiet) async {
+  Database db = await this.db;
+  var result = await db.update(
+      "calculateddiets", userDiet.toMap(), where: "id=?",
+      whereArgs: [userDiet.id]);
+  return result;
+}
 }
