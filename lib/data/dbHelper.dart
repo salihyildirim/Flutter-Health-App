@@ -49,7 +49,7 @@ Future<int> delete(int id) async {
 Future<int> update(UserDiet userDiet) async {
   Database db = await this.db;
   var result = await db.update(
-      "calculateddiets", userDiet.toMap(), where: "id=?",
+      "calculateddiets", userDiet.toMap(forFirebase: false), where: "id=?",
       whereArgs: [userDiet.id]);
   return result;
 }

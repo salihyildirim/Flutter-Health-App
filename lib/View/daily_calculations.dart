@@ -26,8 +26,12 @@ class _DailyCalculationsViewState extends State<DailyCalculationsView> {
       future: dbHelper.getCalculatedDiets(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          userDiets = snapshot.data!;
-          userDietCount = userDiets.length;
+          if (snapshot.hasData) {
+            userDiets = snapshot.data!;
+            userDietCount = userDiets.length;
+          } else {
+            // Veri yoksa veya hata oluştuysa buraya bir işlem ekleyebilirsiniz
+          }
         }
         return Scaffold(
           appBar: AppBar(
@@ -53,7 +57,8 @@ class _DailyCalculationsViewState extends State<DailyCalculationsView> {
                   // Örnek olarak %70
                   center: Text(
                     '70%',
-                    style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                    style:
+                        TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
                   ),
                   progressColor: Colors.blue,
                 ),
@@ -87,8 +92,10 @@ class _DailyCalculationsViewState extends State<DailyCalculationsView> {
                   itemCount: userDiets.length,
                   itemBuilder: (BuildContext context, int index) {
                     return ListTile(
-                      title: Text('Calories Given: ${userDiets[index].calories_given}'),
-                      subtitle: Text('Calories Taken: ${userDiets[index].calories_taken}'),
+                      title: Text(
+                          'Calories Given: ${userDiets[index].calories_given}'),
+                      subtitle: Text(
+                          'Calories Taken: ${userDiets[index].calories_taken}'),
                     );
                   },
                 ),
@@ -104,7 +111,7 @@ class _DailyCalculationsViewState extends State<DailyCalculationsView> {
     dbHelper.insert(UserDiet(
         calories_given: 100,
         calories_taken: 100,
-    ));
+        calculation_date: DateTime.now()));
     setState(() {
       // Eklenen diyeti görmek için yeniden setState çağrısı yapılır
     });
@@ -117,11 +124,10 @@ class _DailyCalculationsViewState extends State<DailyCalculationsView> {
         setState(() {
           userDiets = data;
           userDietCount = data.length;
-        });
+                });
       }
     });
   }
-
 }
 
 class LinearPercentIndicatorWidget extends StatelessWidget {
@@ -136,9 +142,8 @@ class LinearPercentIndicatorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        children: [
+        padding: EdgeInsets.symmetric(vertical: 8.0),
+        child: Row(children: [
           Expanded(
             flex: 2,
             child: Text(
@@ -156,9 +161,7 @@ class LinearPercentIndicatorWidget extends StatelessWidget {
               progressColor: Colors.green,
               center: Text('${(percent * 100).toInt()}%'),
             ),
-          ),
-        ],
-      ),
-    );
+          )
+        ]));
   }
 }
