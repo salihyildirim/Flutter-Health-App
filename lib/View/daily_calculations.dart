@@ -1,10 +1,15 @@
 import "package:flutter/material.dart";
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:womenhealth/Model/user.dart';
 import 'package:womenhealth/Model/user_diet.dart';
 import 'package:womenhealth/data/dbHelper.dart';
 
 class DailyCalculationsView extends StatefulWidget {
+  User? user;
+  DailyCalculationsView(this.user);
+  DailyCalculationsView.withNonUser();
+
   @override
   State<DailyCalculationsView> createState() => _DailyCalculationsViewState();
 }
@@ -70,35 +75,15 @@ class _DailyCalculationsViewState extends State<DailyCalculationsView> {
                 ),
                 SizedBox(height: 10.0),
                 LinearPercentIndicatorWidget(
-                  title: 'Protein',
+                  title: 'Alınan Kalori',
                   percent: 0.5, // Örnek olarak %50
                 ),
-                // Diğer LinearPercentIndicatorWidget'lar
-                ElevatedButton(
-                  onPressed: () async {
-                    addUserDiet();
-                  },
-                  child: Text("EKLE"),
-                ),
                 SizedBox(height: 20.0),
-                Text(
-                  'User Diets',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                LinearPercentIndicatorWidget(
+                  title: 'Verilen Kalori',
+                  percent: 0.5, // Örnek olarak %50
                 ),
-                // ListView.builder'ı burada ekleyin
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: userDiets.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      title: Text(
-                          'Calories Given: ${userDiets[index].calories_given}'),
-                      subtitle: Text(
-                          'Calories Taken: ${userDiets[index].calories_taken}'),
-                    );
-                  },
-                ),
+
               ],
             ),
           ),
@@ -108,10 +93,12 @@ class _DailyCalculationsViewState extends State<DailyCalculationsView> {
   }
 
   void addUserDiet() async {
-    dbHelper.insert(UserDiet(
-        calories_given: 100,
-        calories_taken: 100,
-        calculation_date: DateTime.now()));
+    // dbHelper.insert(UserDiet(
+    //     calories_given: widget.user?.userDiet?.calories_given ?? 0,
+    //     calories_taken: widget.user?.userDiet?.calories_taken ?? 0,
+    //     calculation_date: DateTime.now()));
+    // dbHelper.delete(widget.user!.userDiet!.id!);
+    print("verilen cal ${widget.user?.userDiet!.id ?? 444}");
     setState(() {
       // Eklenen diyeti görmek için yeniden setState çağrısı yapılır
     });

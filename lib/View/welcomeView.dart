@@ -12,7 +12,9 @@ import 'package:womenhealth/ViewModel/foodViewModel.dart';
 import 'package:womenhealth/ViewModel/welcomeViewModel.dart';
 
 class WelcomeView extends StatefulWidget {
-  const WelcomeView({Key? key}) : super(key: key);
+  User? user ;
+  WelcomeView({Key? key}) : super(key: key);
+  WelcomeView.withUser(this.user);
 
   @override
   State<WelcomeView> createState() => _WelcomeViewState();
@@ -24,7 +26,7 @@ class _WelcomeViewState extends State<WelcomeView> {
   User? getUser;
   firebase_auth.User? currentUser;
   int _currentTab = 0;
-  Widget _currentScreen = DailyCalculationsView();
+  Widget _currentScreen = DailyCalculationsView.withNonUser();
 
   Future<void> fetchCurrentUser(BuildContext context) async {
     currentUser = await welcomeViewModel.getCurrentUser();
@@ -65,7 +67,7 @@ class _WelcomeViewState extends State<WelcomeView> {
           setState(() {
             setState(() {
               _currentTab = int;
-              _currentScreen = (int==0) ? DailyCalculationsView() : PreviousCalculationsView();
+              _currentScreen = (int==0) ? DailyCalculationsView.withNonUser() : PreviousCalculationsView();
             });
 
             //_currentScreen = (int == 0) ? GraphScreen() : HistoryScreen();

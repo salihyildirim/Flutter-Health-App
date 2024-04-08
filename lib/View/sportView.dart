@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:womenhealth/Model/user.dart';
 import 'package:womenhealth/Utils/widgets/subsports.dart';
 import 'package:womenhealth/View/daily_calculations.dart';
+import 'package:womenhealth/View/welcomeView.dart';
 import 'package:womenhealth/ViewModel/sportViewModel.dart';
 
 class SportView extends StatefulWidget {
@@ -68,13 +69,18 @@ class _SportViewState extends State<SportView> {
                           String selectedSport = await context
                               .read<SportViewModel>()
                               .translateToEnglish(sportsToShow[index]);
-                          showDialog(
+                          User? returnedUser = await showDialog<User>(
                             context: context,
                             builder: (BuildContext context) {
-                              // Özel bir widget oluştur ve içerisinde istediğiniz içeriği göster.
                               return SubSports(selectedSport, widget.user);
                             },
                           );
+                          if (returnedUser != null) {
+                            // SubSports sayfasından dönen kullanıcıyı kullanarak işlemleri yapabilirsiniz
+                            setState(() {
+                              widget.user = returnedUser;
+                            });
+                          }
                         },
                       );
                     },
@@ -85,7 +91,7 @@ class _SportViewState extends State<SportView> {
             Expanded(
                 child: ElevatedButton(
               onPressed: () {
-                Get.to(DailyCalculationsView());
+                Get.to(WelcomeView.withUser(widget.user));
               },//buraya gecerken database'e kaydetmiş olduğun userDiet nesnesini ilet.
               child: Text("ILERI"),
             ))

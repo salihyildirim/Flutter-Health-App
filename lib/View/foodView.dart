@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:provider/provider.dart';
 import 'package:translator_plus/translator_plus.dart';
 import 'package:womenhealth/Model/User_Diet.dart';
@@ -102,10 +104,7 @@ class _FoodViewState extends State<FoodView> {
               child: ButtonTheme(
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SportView(widget.user)));
+                    Get.to(SportView(widget.user));
                   },
                   child: Text("ILERI"),
                 ),

@@ -74,6 +74,8 @@ class _SubSportsState extends State<SubSports> {
                                                 widget.user.kg.toDouble(),
                                                 durationMinutes);
 
+                                        widget.user.userDiet?.calories_given=givenCalories;
+
                                         context.read<SubSportsViewModel>().addFirebaseUserDietCaloriesGiven(widget.user, givenCalories);
                                       },
                                     );
@@ -84,7 +86,7 @@ class _SubSportsState extends State<SubSports> {
                           },
                         ),
                         ElevatedButton(
-                          onPressed: () async {Navigator.pop(context);},
+                          onPressed: () async {Navigator.pop(context,widget.user);},
                           child: Text("TAMAM"),
                         ),
                       ],
