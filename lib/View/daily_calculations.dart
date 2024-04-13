@@ -22,22 +22,11 @@ class _DailyCalculationsViewState extends State<DailyCalculationsView> {
   @override
   void initState() {
     super.initState();
-    getUserDiets();
+    // getUserDiets();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: dbHelper.getCalculatedDiets(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasData) {
-            userDiets = snapshot.data!;
-            userDietCount = userDiets.length;
-          } else {
-            // Veri yoksa veya hata oluştuysa buraya bir işlem ekleyebilirsiniz
-          }
-        }
         return Scaffold(
           appBar: AppBar(
             title: Text('Daily Results'),
@@ -83,13 +72,15 @@ class _DailyCalculationsViewState extends State<DailyCalculationsView> {
                   title: 'Verilen Kalori',
                   percent: 0.5, // Örnek olarak %50
                 ),
+                ElevatedButton(onPressed: (){
+                  print("userDiet verilen kalori: ${widget.user?.userDiet?.calories_given} userDiet alinan Kalori : ${widget.user?.userDiet?.calories_taken}");
+                }, child: Text("PRESS FOR USER DETAILS"))
 
               ],
             ),
           ),
         );
-      },
-    );
+      }
   }
 
   void addUserDiet() async {
@@ -98,24 +89,23 @@ class _DailyCalculationsViewState extends State<DailyCalculationsView> {
     //     calories_taken: widget.user?.userDiet?.calories_taken ?? 0,
     //     calculation_date: DateTime.now()));
     // dbHelper.delete(widget.user!.userDiet!.id!);
-    print("verilen cal ${widget.user?.userDiet!.id ?? 444}");
-    setState(() {
-      // Eklenen diyeti görmek için yeniden setState çağrısı yapılır
-    });
+    // setState(() {
+    //   // Eklenen diyeti görmek için yeniden setState çağrısı yapılır
+    // });
   }
 
-  getUserDiets() async {
-    var userDietsFuture = dbHelper.getCalculatedDiets();
-    userDietsFuture.then((data) {
-      if (mounted) {
-        setState(() {
-          userDiets = data;
-          userDietCount = data.length;
-                });
-      }
-    });
-  }
-}
+  // getUserDiets() async {
+  //   var userDietsFuture = dbHelper.getCalculatedDiets();
+  //   userDietsFuture.then((data) {
+  //     if (mounted) {
+  //       setState(() {
+  //         userDiets = data;
+  //         userDietCount = data.length;
+  //               });
+  //     }
+  //   });
+  // }
+
 
 class LinearPercentIndicatorWidget extends StatelessWidget {
   final String title;

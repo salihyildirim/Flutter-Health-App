@@ -7,7 +7,7 @@ class SubSportsViewModel with ChangeNotifier {
 //burada userdiet nesnesini alıp, database'e given_calories kısmına ekle(addFirebaseUserDietCaloriesGiven). bunun için user_email lazım.
 //direkt user nesnesini alırsan önceki işlemlerde user.userdiet dogru atandı. onu kullanabilirsin.
 //aynı zamanda email'i de userden alırsın.
-  final FirestoreService _firestoreService = FirestoreService('userdiet');
+  final FirestoreService _firestoreService = FirestoreService('daily_calculations');
 
   Future<Map<String, dynamic>?> readUserDiet(String documentId) async {
     return await _firestoreService.readData(documentId);

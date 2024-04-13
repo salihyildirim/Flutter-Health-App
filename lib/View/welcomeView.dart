@@ -23,10 +23,16 @@ class WelcomeView extends StatefulWidget {
 class _WelcomeViewState extends State<WelcomeView> {
   final WelcomeViewModel welcomeViewModel = Get.put(WelcomeViewModel());
 
+@override
+  void initState() {
+  _currentScreen= DailyCalculationsView(widget.user);
+    super.initState();
+  }
   User? getUser;
   firebase_auth.User? currentUser;
   int _currentTab = 0;
-  Widget _currentScreen = DailyCalculationsView.withNonUser();
+  late Widget _currentScreen;
+
 
   Future<void> fetchCurrentUser(BuildContext context) async {
     currentUser = await welcomeViewModel.getCurrentUser();
@@ -67,7 +73,7 @@ class _WelcomeViewState extends State<WelcomeView> {
           setState(() {
             setState(() {
               _currentTab = int;
-              _currentScreen = (int==0) ? DailyCalculationsView.withNonUser() : PreviousCalculationsView();
+              _currentScreen = (int==0) ? DailyCalculationsView(widget.user) : PreviousCalculationsView();
             });
 
             //_currentScreen = (int == 0) ? GraphScreen() : HistoryScreen();

@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:womenhealth/Utils/data/local_food_database.dart';
 
 class FoodViewModel with ChangeNotifier {
-  final FirestoreService _firestoreService = FirestoreService('userdiet');
+  final FirestoreService _firestoreService = FirestoreService('daily_calculations');
   LocalFood localFood = LocalFood();
   final nutritionApiKey = "fU9y72p/j2sGb2Tdw0j6/g==E0H80ltgZ4HNggFB";
 

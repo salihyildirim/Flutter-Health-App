@@ -23,15 +23,15 @@ class DbHelper {
         "Create table calculateddiets(id integer primary key, calculation_date datetime, calories_taken float, calories_given float)");
   }
 
-  Future<List<UserDiet>> getCalculatedDiets() async {
-    Database db = await this.db;
-    var result = await db.query("calculateddiets", columns: ['*']);
-
-    return List.generate(result.length, (index) {
-      return UserDiet.fromObject(result[index]);
-    }
-    );
-  }
+  // Future<List<UserDiet>> getCalculatedDiets() async {
+  //   Database db = await this.db;
+  //   var result = await db.query("calculateddiets", columns: ['*']);
+  //
+  //   return List.generate(result.length, (index) {
+  //     return UserDiet.fromObject(result[index]);
+  //   }
+  //   );
+  // }
 
 
 Future<int> insert(UserDiet userDiet) async {
@@ -46,11 +46,11 @@ Future<int> delete(int id) async {
   return result;
 }
 
-Future<int> update(UserDiet userDiet) async {
-  Database db = await this.db;
-  var result = await db.update(
-      "calculateddiets", userDiet.toMap(forFirebase: false), where: "id=?",
-      whereArgs: [userDiet.id]);
-  return result;
-}
+// Future<int> update(UserDiet userDiet) async {
+//   Database db = await this.db;
+//   var result = await db.update(
+//       "calculateddiets", userDiet.toMap(forFirebase: false), where: "id=?",
+//       whereArgs: [userDiet.id]);
+//   return result;
+// }
 }
