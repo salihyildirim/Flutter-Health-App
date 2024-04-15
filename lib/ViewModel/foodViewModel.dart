@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:womenhealth/Utils/data/local_food_database.dart';
 
 class FoodViewModel with ChangeNotifier {
-  final FirestoreService _firestoreService = FirestoreService('daily_calculations');
+  final FirestoreService _firestoreService = FirestoreService('userdiet');
   LocalFood localFood = LocalFood();
   final nutritionApiKey = "fU9y72p/j2sGb2Tdw0j6/g==E0H80ltgZ4HNggFB";
 
@@ -1379,6 +1379,12 @@ class FoodViewModel with ChangeNotifier {
       Map<String, dynamic> data, String documentId) async {
     await _firestoreService.createDataWithCustomId(documentId, data);
   }
+  Future<void> createSubcollectionData(
+      {required String documentId,
+        String subcollectionName= "daily_calculations",
+        required Map<String, dynamic> data}) async {
+    _firestoreService.createSubcollectionData(documentId: documentId, data: data);
+  }
 
   Future<Map<String, dynamic>?> readUserDiet(String documentId) async {
     return await _firestoreService.readData(documentId);
@@ -1475,7 +1481,8 @@ class FoodViewModel with ChangeNotifier {
           calculation_date: DateTime.now(),
         );
         user.userDiet = userDiet;
-        createDataWithCustomId(user.userDiet!.toMap(), user.eMail);
+        createSubcollectionData(documentId: user.eMail,data: user.userDiet!.toMap());
+        //createDataWithCustomId(user.userDiet!.toMap(), user.eMail);
         //tam burada yeni oluşturduğumuz userdiet'i kaydet.
       } else {
         user.userDiet!.calories_taken =

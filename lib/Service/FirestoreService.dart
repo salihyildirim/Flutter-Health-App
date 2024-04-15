@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class FirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final String collectionName;
-
+  final  String subcollectionName= "daily_calculations";
   FirestoreService(this.collectionName);
 
   Future<void> createData(Map<String, dynamic> data) async {
@@ -13,6 +13,7 @@ class FirestoreService {
       print('Veri ekleme hatası: $e');
     }
   }
+
   Future<void> createDataWithCustomId(String documentId, Map<String, dynamic> data) async {
     try {
       await _firestore.collection(collectionName).doc(documentId).set(data);
@@ -22,11 +23,25 @@ class FirestoreService {
     }
   }
 
+  Future<void> createSubcollectionData(
+      {required String documentId,
+       String subcollectionName= "daily_calculations",
+      required Map<String, dynamic> data}) async {
+    try {
+      await _firestore
+          .collection(collectionName)
+          .doc(documentId)
+          .collection(subcollectionName)
+          .add(data);
+      print('Alt koleksiyona belge eklendi.');
+    } catch (e) {
+      print('Alt koleksiyona belge ekleme hatası: $e');
+    }
+  }
 
   Future<Map<String, dynamic>?> readData(String documentId) async {
     try {
-      DocumentSnapshot document =
-      await _firestore.collection(collectionName).doc(documentId).get();
+      DocumentSnapshot document = await _firestore.collection(collectionName).doc(documentId).get();
 
       if (document.exists) {
         return document.data() as Map<String, dynamic>;
@@ -42,10 +57,7 @@ class FirestoreService {
 
   Future<void> updateData(String documentId, Map<String, dynamic> newData) async {
     try {
-      await _firestore
-          .collection(collectionName)
-          .doc(documentId)
-          .update(newData);
+      await _firestore.collection(collectionName).doc(documentId).update(newData);
     } catch (e) {
       print('Veri güncelleme hatası: $e');
     }

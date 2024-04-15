@@ -7,7 +7,7 @@ class SubSportsViewModel with ChangeNotifier {
 //burada userdiet nesnesini alıp, database'e given_calories kısmına ekle(addFirebaseUserDietCaloriesGiven). bunun için user_email lazım.
 //direkt user nesnesini alırsan önceki işlemlerde user.userdiet dogru atandı. onu kullanabilirsin.
 //aynı zamanda email'i de userden alırsın.
-  final FirestoreService _firestoreService = FirestoreService('daily_calculations');
+  final FirestoreService _firestoreService = FirestoreService('userdiet');
 
   Future<Map<String, dynamic>?> readUserDiet(String documentId) async {
     return await _firestoreService.readData(documentId);
@@ -28,6 +28,13 @@ class SubSportsViewModel with ChangeNotifier {
     await _firestoreService.createDataWithCustomId(documentId, data);
   }
 
+  Future<void> createSubcollectionData(
+      {required String documentId,
+        String subcollectionName= "daily_calculations",
+        required Map<String, dynamic> data}) async {
+    _firestoreService.createSubcollectionData(documentId: documentId, data: data);
+  }
+
   Future<void> updateUserDiet(
       String documentId, Map<String, dynamic> newData) async {
     await _firestoreService.updateData(documentId, newData);
@@ -45,7 +52,9 @@ class SubSportsViewModel with ChangeNotifier {
           calculation_date: DateTime.now(),
         );
         user.userDiet = userDiet;
-        createDataWithCustomId(user.userDiet!.toMap(), user.eMail);
+        createSubcollectionData(documentId: user.eMail,data: user.userDiet!.toMap());
+
+        //createDataWithCustomId(user.userDiet!.toMap(), user.eMail);
         //tam burada yeni oluşturduğumuz userdiet'i kaydet.
       } else {
         user.userDiet!.calories_given =
