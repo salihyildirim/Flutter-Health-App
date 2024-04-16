@@ -1484,7 +1484,7 @@ class FoodViewModel with ChangeNotifier {
         createSubcollectionData(documentId: user.eMail,data: user.userDiet!.toMap());
         //createDataWithCustomId(user.userDiet!.toMap(), user.eMail);
         //tam burada yeni oluşturduğumuz userdiet'i kaydet.
-      } else {
+      } else { createSubcollectionData(documentId: user.eMail,data: user.userDiet!.toMap());
         user.userDiet!.calories_taken =
             (user.userDiet!.calories_taken ?? 0) + newCalories;
 

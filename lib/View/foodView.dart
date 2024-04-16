@@ -36,7 +36,7 @@ class _FoodViewState extends State<FoodView> {
     setState(() {
       filteredFoods = foods
           .where((food) =>
-              food.food_name.toLowerCase().contains(query.toLowerCase()))
+              food.name.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
@@ -45,7 +45,7 @@ class _FoodViewState extends State<FoodView> {
     List<String> turkishFoods = await widget.foodViewModel.getAllTurkishFoods();
     List<Food> foodList = [];
     for (var foodName in turkishFoods) {
-      Food newFood = Food("food_id", foodName, "food_photo_url", 55);
+      Food newFood = Food("id", foodName, "photo_url", 55,55,55,55,55,55,55,55,55,55);
       foodList.add(newFood);
     }
     setState(() {
@@ -78,12 +78,12 @@ class _FoodViewState extends State<FoodView> {
                   return FutureBuilder<double?>(
                     initialData: 0.0,
                     future: widget.foodViewModel
-                        .getCaloriesFromFood(filteredFoods[index].food_name),
+                        .getCaloriesFromFood(filteredFoods[index].name),
                     builder: (BuildContext context,
                         AsyncSnapshot<double?> snapshot) {
                       return ListTile(
                         title: Text(
-                          "${filteredFoods[index].food_name} (${snapshot.data ?? 'Veri bulunamadı'} cal) .",
+                          "${filteredFoods[index].name} (${snapshot.data ?? 'Veri bulunamadı'} cal) .",
                         ),
                         onTap: () async {
                           UserDiet? userDiet =

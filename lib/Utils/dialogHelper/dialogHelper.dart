@@ -38,7 +38,7 @@ class DialogHelper {
                   ),
                   ElevatedButton(
                     onPressed: () async {
-                      userDiet = await foodViewModel.addFirebaseUserDietCaloriesTaken(user, food.food_name, grams);
+                      userDiet = await foodViewModel.addFirebaseUserDietCaloriesTaken(user, food.name, grams);
                       Navigator.pop(context, userDiet);
                     },
                     child: Text('Ekle'),
