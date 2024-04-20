@@ -59,6 +59,30 @@ class FirestoreService {
     }
   }
 
+  Future<List<Map<String, dynamic>>> readDataFromSubcollection(String documentId,
+      {String subcollectionName = 'daily_calculations'}) async {
+    List<Map<String, dynamic>> subcollectionData = [];
+
+    try {
+      // Alt koleksiyondaki belgeleri alıyoruz
+      QuerySnapshot querySnapshot = await _firestore
+          .collection(collectionName)
+          .doc(documentId)
+          .collection(subcollectionName)
+          .get();
+
+      // Her bir belgeyi döngü ile gezerek Map<String, dynamic> olarak ekliyoruz
+      for (QueryDocumentSnapshot doc in querySnapshot.docs) {
+        subcollectionData.add(doc.data() as Map<String, dynamic>);
+      }
+      return subcollectionData;
+    } catch (e) {
+      print('Veri okuma hatası: $e');
+      return [];
+    }
+  }
+
+
   Future<void> updateData(
       String documentId, Map<String, dynamic> newData) async {
     try {

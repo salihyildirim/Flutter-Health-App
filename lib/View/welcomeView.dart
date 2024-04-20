@@ -104,7 +104,7 @@ class _WelcomeViewState extends State<WelcomeView> {
               } else if (value == 'settings') {
                 //
               } else if (value == 'logout') {
-                await Provider.of<WelcomeViewModel>(context, listen: false)
+                await welcomeViewModel
                     .signOut();
                 Auth.loginState = false;
                 welcomeViewModel.authStatus();

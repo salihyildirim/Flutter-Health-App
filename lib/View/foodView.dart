@@ -71,42 +71,55 @@ class _FoodViewState extends State<FoodView> {
         create: (BuildContext context) => FoodViewModel(),
         child: Column(
           children: [
-            Expanded(flex: 11,
+            Expanded(
+              flex: 11,
               child: ListView.builder(
                 itemCount: filteredFoods.length,
                 itemBuilder: (context, index) {
-                  return FutureBuilder<double?>(
-                    initialData: 0.0,
-                    future: widget.foodViewModel
-                        .getCaloriesFromFood(filteredFoods[index].name),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<double?> snapshot) {
-                      return ListTile(
-                        title: Text(
-                          "${filteredFoods[index].name} (${snapshot.data ?? 'Veri bulunamadı'} cal) .",
-                        ),
-                        onTap: () async {
-                          UserDiet? userDiet =
-                              await DialogHelper.showGramDialog(
-                                  context,
-                                  filteredFoods[index],
-                                  widget.foodViewModel,
-                                  widget.user);
-                          widget.user.userDiet = userDiet;
-                        },
-                      );
+                  return FutureBuilder<Map<String, dynamic>?>(
+                    initialData: null,
+                    future: widget.foodViewModel.getNutritionFromFood(filteredFoods[index].name),
+                    builder: (BuildContext context, AsyncSnapshot<Map<String, dynamic>?> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator(); // Veri yüklenirken göstermek için bir yükleme göstergesi ekleyin
+                      } else if (snapshot.hasError) {
+                        return Text('Hata: ${snapshot.error}');
+                      } else {
+                        var nutritionData = snapshot.data;
+                        if (nutritionData == null) {
+                          return Text('Veri bulunamadı');
+                        }
+
+                        double? calories = nutritionData['calories'];
+
+                        return ListTile(
+                          title: Text(
+                            "${filteredFoods[index].name} (${calories?.toStringAsFixed(2) ?? 'Veri bulunamadı'} cal).",
+                          ),
+                          onTap: () async {
+                            UserDiet? userDiet =
+                            await DialogHelper.showGramDialog(
+                                context,
+                                filteredFoods[index],
+                                widget.foodViewModel,
+                                widget.user);
+                            widget.user.userDiet = userDiet;
+                          },
+                        );
+                      }
                     },
                   );
                 },
               ),
             ),
-            Expanded(flex: 1,
+            Expanded(
+              flex: 1,
               child: ButtonTheme(
                 child: ElevatedButton(
                   onPressed: () {
                     Get.to(SportView(widget.user));
                   },
-                  child: Text("ILERI"),
+                  child: Text("İLERİ"),
                 ),
               ),
             ),
@@ -115,4 +128,5 @@ class _FoodViewState extends State<FoodView> {
       ),
     );
   }
+
 }

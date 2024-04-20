@@ -1379,15 +1379,17 @@ class FoodViewModel with ChangeNotifier {
       Map<String, dynamic> data, String documentId) async {
     await _firestoreService.createDataWithCustomId(documentId, data);
   }
+
   Future<void> createSubcollectionData(
       {required String documentId,
-        String subcollectionName= "daily_calculations",
-        required Map<String, dynamic> data}) async {
-    _firestoreService.createSubcollectionData(documentId: documentId, data: data);
+      String subcollectionName = "daily_calculations",
+      required Map<String, dynamic> data}) async {
+    _firestoreService.createSubcollectionData(
+        documentId: documentId, data: data);
   }
 
-  Future<Map<String, dynamic>?> readUserDiet(String documentId) async {
-    return await _firestoreService.readData(documentId);
+  Future<List<Map<String, dynamic>>> readUserDiet(String documentId) async {
+    return await _firestoreService.readDataFromSubcollection(documentId);
   }
 
   Future<void> updateUserDiet(
@@ -1420,25 +1422,19 @@ class FoodViewModel with ChangeNotifier {
     }
   }
 
-  Future<double?> getCaloriesFromFood(String foodName) async {
+  //getCaloriesFromFood
+  Future<Map<String, dynamic>?> getNutritionFromFood(String foodName) async {
     var foodBody = await fetchNutritionBody(foodName);
 
     if (foodBody != null) {
       var jsonResponse = json.decode(foodBody);
       if (jsonResponse is List && jsonResponse.isNotEmpty) {
         var firstItem = jsonResponse[0];
-        if (firstItem is Map<String, dynamic> &&
-            firstItem.containsKey('calories')) {
-          var calories = firstItem['calories'];
-          if (calories is double) {
-            return calories;
-          } else if (calories is int) {
-            return calories.toDouble();
-          }
+        if (firstItem is Map<String, dynamic>) {
+          return firstItem; // İlk öğeyi Map<String, dynamic> olarak döndür
         }
       }
     }
-    // Eğer herhangi bir değer bulunamazsa veya tür uyumsuzluğu varsa null döndür
     return null;
   }
 
@@ -1456,43 +1452,88 @@ class FoodViewModel with ChangeNotifier {
   //   print("Yanit Yok Listesi :");
   //   print(foodsToRemove);
   // }
-  Future<UserDiet?> fetchUserDiet(String documentId) async {
-    Map<String, dynamic>? userDietMap = await readUserDiet(documentId);
-    if (userDietMap != null) {
-      UserDiet userDiet = UserDiet.fromMap(userDietMap);
-      return userDiet;
+  //fetchDailyCalculations
+  Future<List<Map<String, dynamic>>?> fetchUserDiet(String documentId) async {
+    List<Map<String, dynamic>> daily_calculations = await readUserDiet(documentId);
+    if (daily_calculations.isNotEmpty) {
+      return daily_calculations;
+      //UserDiet userDiet = UserDiet.fromMap(userDietMap);
+      // return userDiet;
     } else {
       return null;
-      print("userDiet çekilemedi.");
     }
   }
 
-  Future<UserDiet> addFirebaseUserDietCaloriesTaken(User user, String foodName, int gram) async {
-    UserDiet? gettingUserDiet = await fetchUserDiet(user.eMail);
-    user.userDiet = gettingUserDiet;
+  Future<UserDiet> addFirebaseUserDietCaloriesTaken(
+      User user, String foodName, int gram) async {
 
-    double? caloriesPer100Gram = await getCaloriesFromFood(foodName);
+    List<Map<String, dynamic>>? dailyCalculations = await fetchUserDiet(user.eMail);
+    DateTime today = DateTime.now();
 
-    if (caloriesPer100Gram != null) {
-      double newCalories = (caloriesPer100Gram / 100) * gram;
-      if (user.userDiet == null) {
+    if (dailyCalculations != null && dailyCalculations.isNotEmpty) {
+      // En son eklenen dökümanın tarihini al
+      DateTime lastDocumentDate = DateTime.parse(dailyCalculations.last['calculation_date']);
+
+      // Eğer en son eklenen döküman bugünün tarihine sahip değilse
+      if (lastDocumentDate.year != today.year ||
+          lastDocumentDate.month != today.month ||
+          lastDocumentDate.day != today.day) {
         UserDiet userDiet = UserDiet(
-          calories_taken: newCalories,
-          calculation_date: DateTime.now(),
-        );
-        user.userDiet = userDiet;
-        createSubcollectionData(documentId: user.eMail,data: user.userDiet!.toMap());
-        //createDataWithCustomId(user.userDiet!.toMap(), user.eMail);
-        //tam burada yeni oluşturduğumuz userdiet'i kaydet.
-      } else { createSubcollectionData(documentId: user.eMail,data: user.userDiet!.toMap());
-        user.userDiet!.calories_taken =
-            (user.userDiet!.calories_taken ?? 0) + newCalories;
-
-        //user.userDiet 'i database'e kaydet.
-        updateUserDiet(user.eMail, user.userDiet!.toMap());
+                   calories_taken: newCalories,
+                   calculation_date: DateTime.now(),
+                   carbohydrates_total_g: nutritionMap?['carbohydrates_total_g'],
+                   cholesterol_mg: nutritionMap?['cholesterol_mg'],
+                   fat_total_g: nutritionMap?['fat_total_g'],
+                   fiber_g: nutritionMap?['fiber_g'],
+                   potassium_mg: nutritionMap?['potassium_mg'],
+                   protein_g: nutritionMap?['protein_g'],
+                   sodium_mg: nutritionMap?['sodium_mg'],
+                   sugar_g: nutritionMap?['sugar_g'],
       }
-    }
-    return user.userDiet!;
+
+ //    UserDiet? gettingUserDiet;
+ //
+ //    user.userDiet = gettingUserDiet;
+ //    double? caloriesPer100Gram;
+ //
+ //    Map<String, dynamic>? nutritionMap = await getNutritionFromFood(foodName);
+ //
+ //    if (nutritionMap != null) {
+ //      caloriesPer100Gram = nutritionMap['calories'];
+ //    }
+ // // BURADA O GÜNÜN TARİHİ ÇEKİLİP O TARİHLE EŞLEŞİYOR MU DİYE KONTROL EDİLMELİ
+ //    if (caloriesPer100Gram != null) {
+ //      double newCalories = (caloriesPer100Gram / 100) * gram;
+ //      if (user.userDiet == null) {
+ //        UserDiet userDiet = UserDiet(
+ //          calories_taken: newCalories,
+ //          calculation_date: DateTime.now(),
+ //          carbohydrates_total_g: nutritionMap?['carbohydrates_total_g'],
+ //          cholesterol_mg: nutritionMap?['cholesterol_mg'],
+ //          fat_total_g: nutritionMap?['fat_total_g'],
+ //          fiber_g: nutritionMap?['fiber_g'],
+ //          potassium_mg: nutritionMap?['potassium_mg'],
+ //          protein_g: nutritionMap?['protein_g'],
+ //          sodium_mg: nutritionMap?['sodium_mg'],
+ //          sugar_g: nutritionMap?['sugar_g'],
+ //
+ //        );
+ //        user.userDiet = userDiet;
+ //        createSubcollectionData(
+ //            documentId: user.eMail, data: user.userDiet!.toMap());
+ //        //createDataWithCustomId(user.userDiet!.toMap(), user.eMail);
+ //        //tam burada yeni oluşturduğumuz userdiet'i kaydet.
+ //      } else {
+ //        createSubcollectionData(
+ //            documentId: user.eMail, data: user.userDiet!.toMap());
+ //        user.userDiet!.calories_taken =
+ //            (user.userDiet!.calories_taken ?? 0) + newCalories;
+ //
+ //        //user.userDiet 'i database'e kaydet.
+ //        updateUserDiet(user.eMail, user.userDiet!.toMap());
+ //      }
+ //    }
+ //    return user.userDiet!;
   }
 
   Future<List<String>> getAllTurkishFoods() async {
@@ -1514,6 +1555,4 @@ class FoodViewModel with ChangeNotifier {
 
     return false;
   }
-
-
 }

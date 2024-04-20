@@ -5,12 +5,12 @@ class UserDiet {
   double? calories_taken;
   double? calories_given;
   double? carbohydrates_total_g;
-  double? cholesterol_mg;
+  int? cholesterol_mg;
   double? fat_total_g;
   double? fiber_g;
-  double? potassium_mg;
+  int? potassium_mg;
   double? protein_g;
-  double? sodium_mg;
+  int? sodium_mg;
   double? sugar_g;
 
   UserDiet({
