@@ -1,3 +1,5 @@
+import 'dart:isolate';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirestoreService {
@@ -59,7 +61,32 @@ class FirestoreService {
     }
   }
 
-  Future<List<Map<String, dynamic>>> readDataFromSubcollection(String documentId,
+  Future<String?> getLatestDailyCalculationsDocumentId(
+      String userDocumentId) async {
+    try {
+      // Belirli koleksiyondan belgeleri al
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance
+              .collection('userdiet')
+              .doc(userDocumentId)
+              .collection('daily_calculations')
+              .get();
+
+      // Eğer belgeler varsa, son belgenin belge kimliğini döndür
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot.docs.last.id;
+      } else {
+        // Eğer koleksiyon boşsa null döndür
+        return null;
+      }
+    } catch (e) {
+      print('Hata: $e');
+      return null;
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> readDataFromSubcollection(
+      String documentId,
       {String subcollectionName = 'daily_calculations'}) async {
     List<Map<String, dynamic>> subcollectionData = [];
 
@@ -82,7 +109,6 @@ class FirestoreService {
     }
   }
 
-
   Future<void> updateData(
       String documentId, Map<String, dynamic> newData) async {
     try {
@@ -92,6 +118,32 @@ class FirestoreService {
           .update(newData);
     } catch (e) {
       print('Veri güncelleme hatası: $e');
+    }
+  }
+
+  Future<void> updateSubCollectionData(
+      {required String documentId,
+      String subcollectionName = "daily_calculations",
+      required Map<String, dynamic> newData}) async {
+
+    String? lastDocId = await getLatestDailyCalculationsDocumentId(documentId);
+
+    String isoTypeLastDoc="";
+
+    if (lastDocId != null) {
+      DateTime dateTime = DateTime.parse(lastDocId);
+      isoTypeLastDoc = dateTime.toIso8601String();
+    }
+
+    try {
+      await _firestore
+          .collection(collectionName)
+          .doc(documentId)
+          .collection(subcollectionName)
+          .doc(newData[isoTypeLastDoc])
+          .update(newData);
+    } catch (e) {
+      print('Veri güncelleme hatasıııııııııı: $e');
     }
   }
 
