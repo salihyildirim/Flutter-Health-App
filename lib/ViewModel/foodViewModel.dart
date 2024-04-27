@@ -1469,9 +1469,6 @@ class FoodViewModel with ChangeNotifier {
       User user, String foodName, int gram) async {
     UserDiet? gettingUserDiet;
 
-    String? sonDok= await _firestoreService.getLatestDailyCalculationsDocumentId(user.eMail);
-    print("son döküman adi  ${DateTime.parse(sonDok!)}");
-
     user.userDiet = gettingUserDiet;
     double? caloriesPer100Gram;
 

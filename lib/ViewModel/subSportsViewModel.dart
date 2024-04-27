@@ -44,7 +44,9 @@ class SubSportsViewModel with ChangeNotifier {
       User user, double givenCalories) async {
     UserDiet? gettingUserDiet = await fetchUserDiet(user.eMail);
     user.userDiet = gettingUserDiet;
-
+ // BURADA YAPMAN GEREKEN : FETCH EDILEN USERDIETIN calculation_date == bugün mü?
+    //evet ise yeni bir döküman oluştur.
+    //değil ise o dökümanı çek ve update et.
     if (givenCalories > 0) {
       if (user.userDiet == null) {
         UserDiet userDiet = UserDiet(
