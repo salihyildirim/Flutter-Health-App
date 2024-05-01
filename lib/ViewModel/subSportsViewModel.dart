@@ -13,9 +13,13 @@ class SubSportsViewModel with ChangeNotifier {
     return await _firestoreService.readData(documentId);
   }
 
-  Future<UserDiet?> fetchUserDiet(String documentId) async {
-    Map<String, dynamic>? userDietMap = await readUserDiet(documentId);
-    if (userDietMap != null) {
+  Future<List<Map<String, dynamic>>> readUserDietDaily(String documentId) async {
+    return await _firestoreService.readDataFromSubcollection(documentId);
+  }
+
+  Future<UserDiet?> fetchUserDietDaily(String documentId) async {
+    List<Map<String, dynamic>> userDietDailyMap = await readUserDietDaily(documentId);
+    if (userDietDailyMap.isNotEmpty) {
       UserDiet userDiet = UserDiet.fromMap(userDietMap);
       return userDiet;
     } else {
@@ -42,7 +46,7 @@ class SubSportsViewModel with ChangeNotifier {
 
   Future<void> addFirebaseUserDietCaloriesGiven(
       User user, double givenCalories) async {
-    UserDiet? gettingUserDiet = await fetchUserDiet(user.eMail);
+    UserDiet? gettingUserDiet = await fetchUserDietDaily(user.eMail);
     user.userDiet = gettingUserDiet;
  // BURADA YAPMAN GEREKEN : FETCH EDILEN USERDIETIN calculation_date == bugün mü?
     //evet ise yeni bir döküman oluştur.
