@@ -20,7 +20,7 @@ class SubSportsViewModel with ChangeNotifier {
   Future<UserDiet?> fetchUserDietDaily(String documentId) async {
     List<Map<String, dynamic>> userDietDailyMap = await readUserDietDaily(documentId);
     if (userDietDailyMap.isNotEmpty) {
-      UserDiet userDiet = UserDiet.fromMap(userDietMap);
+      UserDiet userDiet = UserDiet.fromMap(userDietMap); // burasini degistir
       return userDiet;
     } else {
       return null;
