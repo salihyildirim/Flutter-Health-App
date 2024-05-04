@@ -1388,7 +1388,7 @@ class FoodViewModel with ChangeNotifier {
         documentId: documentId, data: data);
   }
 
-  Future<List<Map<String, dynamic>>> readUserDiet(String documentId) async {
+  Future<List<Map<String, dynamic>>> readUserDietDaily(String documentId) async {
     return await _firestoreService.readDataFromSubcollection(documentId);
   }
 
@@ -1454,12 +1454,10 @@ class FoodViewModel with ChangeNotifier {
   // }
   //fetchDailyCalculations
   Future<List<Map<String, dynamic>>?> fetchUserDiet(String documentId) async {
-    List<Map<String, dynamic>> daily_calculations =
-        await readUserDiet(documentId);
-    if (daily_calculations.isNotEmpty) {
-      return daily_calculations;
-      //UserDiet userDiet = UserDiet.fromMap(userDietMap);
-      // return userDiet;
+    List<Map<String, dynamic>> dailyCalculationsList =
+        await readUserDietDaily(documentId);
+    if (dailyCalculationsList.isNotEmpty) {
+      return dailyCalculationsList;
     } else {
       return null;
     }
@@ -1467,9 +1465,7 @@ class FoodViewModel with ChangeNotifier {
 
   Future<UserDiet> addFirebaseUserDietCaloriesTaken(
       User user, String foodName, int gram) async {
-    UserDiet? gettingUserDiet;
 
-    user.userDiet = gettingUserDiet;
     double? caloriesPer100Gram;
 
     Map<String, dynamic>? nutritionMap = await getNutritionFromFood(foodName);
@@ -1507,13 +1503,20 @@ class FoodViewModel with ChangeNotifier {
         );
 
         user.userDiet = userDiet;
-        createSubcollectionData(  // NEDEN BURAYA GİRİYOR ????
+        createSubcollectionData(
             documentId: user.eMail, data: user.userDiet!.toMap());
-        //createDataWithCustomId(user.userDiet!.toMap(), user.eMail);
         //tam burada yeni oluşturduğumuz userdiet'i kaydet.
       } else {
         user.userDiet!.calories_taken =
-            (user.userDiet!.calories_taken ?? 0) + newCalories; // DIKKAT SADECE KALORİ ÜSTÜNE EKLIYOR HEPSINE YAP
+            (user.userDiet!.calories_taken ?? 0) + newCalories;
+        user.userDiet!.carbohydrates_total_g = nutritionMap?['carbohydrates_total_g'];
+        user.userDiet!.cholesterol_mg = nutritionMap?['cholesterol_mg'];
+        user.userDiet!.fat_total_g = nutritionMap?['fat_total_g'];
+        user.userDiet!.fiber_g = nutritionMap?['fiber_g'];
+        user.userDiet!.potassium_mg = nutritionMap?['potassium_mg'];
+        user.userDiet!.protein_g = nutritionMap?['protein_g'];
+        user.userDiet!.sodium_mg = nutritionMap?['sodium_mg'];
+        user.userDiet!.sugar_g = nutritionMap?['sugar_g'];
 
         //user.userDiet 'i database'e kaydet.
         _firestoreService.updateSubCollectionData(newData: user.userDiet!.toMap(), documentId: user.eMail,);

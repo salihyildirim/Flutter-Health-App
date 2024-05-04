@@ -127,12 +127,13 @@ class FirestoreService {
       required Map<String, dynamic> newData}) async {
 
     String? lastDocId = await getLatestDailyCalculationsDocumentId(documentId);
-
+    print("lastDocId = $lastDocId");
     String isoTypeLastDoc="";
 
     if (lastDocId != null) {
       DateTime dateTime = DateTime.parse(lastDocId);
       isoTypeLastDoc = dateTime.toIso8601String();
+      print("isoTypeLastDoc = $isoTypeLastDoc");
     }
 
     try {
@@ -140,7 +141,7 @@ class FirestoreService {
           .collection(collectionName)
           .doc(documentId)
           .collection(subcollectionName)
-          .doc(newData[isoTypeLastDoc])
+          .doc(isoTypeLastDoc)
           .update(newData);
     } catch (e) {
       print('Veri güncelleme hatasıııııııııı: $e');
