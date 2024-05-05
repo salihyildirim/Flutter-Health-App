@@ -11,6 +11,7 @@ import 'package:womenhealth/View/previous_calculations.dart';
 import 'package:womenhealth/ViewModel/foodViewModel.dart';
 import 'package:womenhealth/ViewModel/welcomeViewModel.dart';
 
+//buraad artık verileri çekip ekrana vericez
 class WelcomeView extends StatefulWidget {
   User? user ;
   WelcomeView({Key? key}) : super(key: key);
@@ -96,7 +97,6 @@ class _WelcomeViewState extends State<WelcomeView> {
         actions: [
           PopupMenuButton<String>(
             offset: Offset(0, kToolbarHeight),
-            // Menüyü App Bar'ın altında başlatır
             onSelected: (value) async {
               //
               if (value == 'edit') {
