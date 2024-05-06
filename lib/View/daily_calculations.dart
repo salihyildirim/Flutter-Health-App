@@ -8,7 +8,6 @@ import 'package:womenhealth/data/dbHelper.dart';
 class DailyCalculationsView extends StatefulWidget {
   User? user;
   DailyCalculationsView(this.user);
-  DailyCalculationsView.withNonUser();
 
   @override
   State<DailyCalculationsView> createState() => _DailyCalculationsViewState();
@@ -73,7 +72,7 @@ class _DailyCalculationsViewState extends State<DailyCalculationsView> {
                   percent: 0.5, // Örnek olarak %50
                 ),
                 ElevatedButton(onPressed: (){
-                  print("userDiet verilen kalori: ${widget.user?.userDiet?.calories_given} userDiet alinan Kalori : ${widget.user?.userDiet?.calories_taken}");
+
                 }, child: Text("PRESS FOR USER DETAILS"))
 
               ],

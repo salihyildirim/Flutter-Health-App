@@ -11,7 +11,6 @@ import 'package:womenhealth/View/previous_calculations.dart';
 import 'package:womenhealth/ViewModel/foodViewModel.dart';
 import 'package:womenhealth/ViewModel/welcomeViewModel.dart';
 
-//buraad artık verileri çekip ekrana vericez
 class WelcomeView extends StatefulWidget {
   User? user ;
   WelcomeView({Key? key}) : super(key: key);
